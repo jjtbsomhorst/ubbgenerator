@@ -1,3 +1,4 @@
+
 <html lang="en" ng-app="ubbGenerator">
 <head>
 <link rel="stylesheet"
@@ -16,7 +17,7 @@
 		<h2>Movie UBB Generator</h2>
 		<span flex></span>
 		<div flex="66">
-			<md-autocomplete placeholder="Search a movie by title" md-selected-item="selectedMovie" md-delay="250"
+			<md-autocomplete md-min-length="2" placeholder="Search a movie by title" md-selected-item="selectedMovie" md-delay="250"
 				md-selected-item="selectedItem" md-search-text="searchText"
 				md-items="item in getMovies(searchText)" md-item-text="item.Title ">
 			<md-item-template> <span
@@ -69,7 +70,7 @@
 				</div>
 		</md-card-content>
 		<div class="md-actions" layout="row" layout-align="end center">
-			<md-button ng-click="generateUbb()">Genereer ubb</md-button>
+			<md-button ng-disabled="{{showubbbutton}}" ng-click="generateUbb()">Genereer ubb</md-button>
 		</div>
 		</md-card>
 

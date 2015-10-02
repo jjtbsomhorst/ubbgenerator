@@ -2,6 +2,7 @@ var c = angular.module('appControllers',['ngMessages','appServices']);
 c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$http){
 	$scope.getMovies = function(text){
 		$scope.showLoading=true
+		
 		return $http.get('api.php/movies/'+text).then(function(response){
 			$scope.showLoading=false;
 			return response.data.Search;
@@ -62,5 +63,11 @@ c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$
 		}
 		return false;
 	}
+	$scope.$watch('reviewtext',function(n,o){
+		$scope.showubbbutton = false;
+		if(n != null && n != ""){
+			$scope.showubbbutton = true;
+		}
+	})
 	
 }]);
