@@ -2,7 +2,7 @@ var c = angular.module('appControllers',['ngMessages','appServices']);
 c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$http){
 	$scope.getMovies = function(text){
 		$scope.showLoading=true
-		
+		text = text.replace(" ","+");
 		return $http.get('api.php/movies/'+text).then(function(response){
 			$scope.showLoading=false;
 			return response.data.Search;

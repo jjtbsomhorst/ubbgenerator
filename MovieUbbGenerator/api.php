@@ -1,21 +1,36 @@
 <?php
 require 'libs/Slim/Slim.php';
+require 'config.php';
 
 \Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
+$app = new \Slim\Slim($config);
 $app->response->headers->set('Content-Type', 'application/json');
 $app->get('/movies/:term',function($q)use($app){
-	$response = file_get_contents("http://www.omdbapi.com/?type=movie&s=".$q);
-	$app->response->setBody($response);
-	$app->response->setStatus(200);
+	$q = urlencode($q);
+	$ch = curl_init();
+	curl_setopt($ch,CURLOPT_URL,"http://www.omdbapi.com/?type=movie&s=".$q);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	$response = curl_exec($ch);
+    curl_close($ch);
+	if($response !== false){
+		$decodedResponse = json_decode($response,true);
+		if(array_key_exists('Response',$decodedResponse)){ // in case of error..
+			$response = array("Search"=>array());
+			$response = json_encode($response);
+		}
+		
+		
+	   $app->response->setBody($response);
+	   $app->response->setStatus(200);
+	}
 });
 
 $app->get('/movie/:imdb',function($q)use($app){
-	
+	$q = htmlentities($q);
 	$response = file_get_contents("http://www.omdbapi.com/?type=movie&plot=full&i=".$q);
 	$omdbResponse= json_decode($response);
 	
-	$conn = new PDO('mysql:host=localhost;dbname=jeroen01_moviedb;charset=utf8', 'jeroen01_moviedb', 'BQJJKfgPdOkKFChp');
+	$conn = new PDO("mysql:host=".$app->config('db.host').";dbname=".$app->config('db.name').";charset=utf8", $app->config('db.username'), $app->config('db.password'));
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
 	$stmt = $conn->prepare('SELECT count(*) as c from posters where imbdid = :id');
@@ -43,7 +58,7 @@ $app->get('/movie/:imdb',function($q)use($app){
 		$imageData = file_get_contents($smallPosterUrl);
 		
 		$fileName = bin2hex(openssl_random_pseudo_bytes(16));
-		file_put_contents("/home/jeroen01/domains/jeroensomhorst.eu/public_html/ubbgenerator/images/".$fileName.".jpg", $imageData);
+		file_put_contents($app->config('imagepath').$fileName.".jpg", $imageData);
 		$stmt = $conn->prepare('INSERT INTO posters(`imbdid`,`fileid`) values(:imdb,:file)');
 		$stmt->bindParam(":imdb",$q);
 		$stmt->bindParam(":file",$fileName);
@@ -53,7 +68,7 @@ $app->get('/movie/:imdb',function($q)use($app){
 	}	
 	
 
-	$omdbResponse->Poster = "http://www.jeroensomhorst.eu/ubbgenerator/images/".$filename.".jpg";
+	$omdbResponse->Poster = "images/".$filename.".jpg";
 	
 	$app->response->setBody(json_encode($omdbResponse));
 	

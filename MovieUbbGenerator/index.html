@@ -64,13 +64,13 @@
 				</div>
 				<div layout="row">
 					<md-input-container>
-					<label>Score</label>
-					<input type="number" ng-model="reviewscore" value="0" max="10" min="0" step="0.5"></input> / 10
+					<label>Score ( 0 / 10)</label>
+					<input type="number" ng-model="reviewscore" value="0" max="10" min="0" step="0.5"></input>
 					</md-input-container>
 				</div>
 		</md-card-content>
 		<div class="md-actions" layout="row" layout-align="end center">
-			<md-button ng-disabled="{{showubbbutton}}" ng-click="generateUbb()">Genereer ubb</md-button>
+		<md-button class="md-accent md-raised" ng-disabled="{{showubbbutton}}" ng-click="generateUbb()">Genereer ubb</md-button>
 		</div>
 		</md-card>
 
