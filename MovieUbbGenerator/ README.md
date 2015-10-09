@@ -4,6 +4,7 @@ Generates UBB code used at the Movie topic on gathering.tweakers.net
 
 ## Changelog
 
+09-10-2015: Removed the 'meukje.com' referels in the images. 
 04-10-2015: Start using config file instead of hardcoded settings in api.php
 04-10-2015: When searching for movies on omdb api our api wrapper returns an empty search array when omdb returns an error.
 04-10-2015: Using curl instead of file_get_contents. 
