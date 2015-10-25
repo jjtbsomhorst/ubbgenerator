@@ -33,7 +33,7 @@ c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$
 	
 	$scope.generateUbb = function(){
 		var imdbLink = "http://www.imdb.com/title/"+$scope.movie.imdbID;
-		var wikiLink = "https://en.wikipedia.org/w/index.php?search="+$scope.movie.Title;
+		var wikiLink = "https://en.wikipedia.org/w/index.php?search="+$scope.movie.Title+" (film)";
 		var youtubelink = "https://www.youtube.com/results?search_query=trailer+"+$scope.movie.Title.replace(" ","+")+"+official+"+$scope.movie.Year;
 		var starUrl = "http://www.jeroensomhorst.eu/ubbgenerator/assets/stars/"+$scope.reviewscore+".png";
 		var posterurl = "http://www.jeroensomhorst.eu/ubbgenerator/"+$scope.movie.Poster;
@@ -48,7 +48,8 @@ c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$
 		$scope.ubbcode += "[url=\""+youtubelink+"\"][img=16,16,,left,\"\"]http://www.jeroensomhorst.eu/ubbgenerator/assets/youtube.png[/img][/url]";
 		$scope.ubbcode += "[img=,24,,,,]"+starUrl+"[/img]";
 		$scope.ubbcode += "[b]"+$scope.reviewscore+"[/b] / 10[/small][/td][/tr][/table]";
-
+		$scope.ubbcode += "[sub][url=http://www.jeroensomhorst.eu/ubbgenerator/]Genereer je eigen UBB code review[/url][/sub]";
+			
 		$scope.ubbGenerated = true;
 	}
 	
