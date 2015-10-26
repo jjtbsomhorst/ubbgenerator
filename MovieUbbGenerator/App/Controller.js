@@ -1,5 +1,5 @@
-var c = angular.module('appControllers',['ngMessages','appServices']);
-c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$http){
+var c = angular.module('appControllers',['ngMaterial','ngMessages','appServices']);
+c.controller('AppCtrl',['$scope','$location','$http','$mdToast',function($scope,$location,$http,$mdToast){
 	$scope.getMovies = function(text){
 		$scope.showLoading=true
 		text = text.replace(" ","+");
@@ -69,6 +69,12 @@ c.controller('AppCtrl',['$scope','$location','$http',function($scope,$location,$
 		if(n != null && n != ""){
 			$scope.showubbbutton = true;
 		}
-	})
+	});
+	
+	$scope.showToast = function(){
+		$mdToast.show($mdToast.simple().content('UBB code succesvol naar klembord gekopieerd.'));
+	}
+	
+	new Clipboard('#clipboard');
 	
 }]);
