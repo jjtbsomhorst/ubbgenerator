@@ -43,8 +43,12 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast',function($scope,
 			movie: $scope.movie
 		};
 		
-		$scope.ubbcode = $scope.generateUbbCode(review);
-		$scope.ubbGenerated = true;
+		$scope.reviews.push(review);
+//		
+//		
+//		$scope.ubbcode = $scope.generateUbbCode(review);
+//		$scope.ubbGenerated = true;
+		$scope.generateUbbFromList();
 	}
 	
 	$scope.generateUbbFromList = function(){
@@ -63,7 +67,7 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast',function($scope,
 		var imdbLink = "http://www.imdb.com/title/"+review.movie.imdbID;
 		var wikiLink = "https://en.wikipedia.org/w/index.php?search="+review.movie.Title+" (film)";
 		var youtubelink = "https://www.youtube.com/results?search_query=trailer+"+review.movie.Title.replace(" ","+")+"+official+"+review.movie.Year;
-		var starUrl = "http://www.jeroensomhorst.eu/ubbgenerator/assets/stars/"+$scope.reviewscore+".png";
+		var starUrl = "http://www.jeroensomhorst.eu/ubbgenerator/assets/stars/"+review.reviewScore+".png";
 		var posterurl = "http://www.jeroensomhorst.eu/ubbgenerator/"+review.movie.Poster;
 		var ubbcode  = "[table bgcolor=transparent width=100% cellpadding=6]";
 		ubbcode += "[tr][td fontsize=14][url=\""+imdbLink+"\",\"IMDb -- "+review.movie.Title+" ("+review.movie.Year+")\"][b]"+review.movie.Title+"[/b] ("+review.movie.Year+")[/url]";
@@ -115,6 +119,7 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast',function($scope,
 		delete $scope.reviewtext;
 		delete $scope.reviewscore;
 		delete $scope.selectedMovie;	
+		delete $cope.searchText;
 	}
 	
 	new Clipboard('#clipboard');

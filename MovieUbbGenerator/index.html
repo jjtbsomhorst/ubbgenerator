@@ -30,6 +30,7 @@
 		 </md-list>		
 		 <md-button ng-click="generateUbbFromList()" class="md-accent md-raised" ng-disabled="{{showubbbutton}}">Genereer ubb</md-button>
 	</md-sidenav>
+	<md-content layout="column" flex>
 	
 	<div ng-show="showLoading" layout="row" layout-align="center center">
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -74,11 +75,11 @@
 	</div>
 	<div ng-show="ubbGenerated" layout="row" layout-align="center center">
 		<span flex=10></span>
-		<md-card layout="column" flex="66"> <md-card-content>
+		<md-card layout="column" flex> <md-card-content>
 		<div layout="row" layout-margin>
-			<div layout="column" flex="100">
-				<md-input-container layout="column"> <label>UBB Code</label> <textarea id="ubbcode" ng-model="ubbcode"
-					cols="2" rows="10"></textarea> </md-input-container>
+			<div layout="column" flex>
+				<md-input-container> <label>UBB Code</label> <textarea id="ubbcode" ng-model="ubbcode"
+					cols="1"></textarea> </md-input-container>
 			</div>
 		</div>
 		</md-card-content>
@@ -93,6 +94,7 @@
 		</div>
 		</md-card>
 	</div>
+	</md-content>
 	</div>
 	<!-- Angular Material Dependencies -->
 	<script src="libs/angularjs/1.4.6/angular.min.js" type="text/javascript"></script>
