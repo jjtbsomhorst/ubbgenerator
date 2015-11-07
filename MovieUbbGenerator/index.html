@@ -25,79 +25,20 @@
 
 
 	<div layout="row" flex>
-	<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="!showSearch">	
-		<md-list >
-		  <md-subheader class="md-no-sticky">Reviews</md-subheader>
-		  <md-list-item ng-repeat="review in reviews">
-		    <p> {{ review.Title }} </p>
-		  </md-list-item>
-		 </md-list>		
-		 <md-button ng-click="generateUbb()" class="md-accent md-raised" ng-disabled="reviews.length == 0">Genereer ubb</md-button>
+	<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="!showSearch">
+		<review-list></review-list>
 	</md-sidenav>
 	<md-content layout="column" flex>
 	
 	<div ng-show="showLoading" layout="row" layout-align="center center">
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
-	<div ng-show="showMovieCard()" layout="row" layout-align="center center">
-		<span flex=10></span>
-		<form ng-submit="generateUbb()">
-			<md-card layout="column" flex="66"> <md-card-content>
-			<div layout="row" layout-margin>
-				<div layout="column" layout-margin>
-					<img ng-src="{{movie.Poster}}" class="md-card-image">
-				</div>
-				<div layout="column" flex="75">
-					<div layout="row">
-						<h3>{{movie.Title}}</h3>
-						<br />
-					</div>
-					<div layout="row">
-						<span class="md-caption"><b>imdb</b>: {{movie.imdbRating}} | <b>Genre</b>: {{movie.Genre}} | <b>Released</b>: {{movie.Year}}</span>
-					</div>
-					<div layout="row"></div>
-					<div layout="row" layout-margin>
-						<p>{{movie.Plot}}</p>
-					</div>
-				</div>
-			</div>
-			<div layout="row">
-				<md-input-container layout="column" flex="100"> <label>Review</label> <textarea ng-model="reviewtext" required></textarea>
-				</md-input-container>
-			</div>
-			<div layout="row">
-				<md-input-container> <label>Score ( {{reviewscore}} / 10)</label> <input type="number" ng-model="reviewscore"
-					value="0" max="10" min="0" step="0.5" required></input> </md-input-container>
-			</div>
-			</md-card-content>
-			<div class="md-actions" layout="row" layout-align="end center">
-				<md-button type="submit" class="md-accent md-raised" ng-disabled="{{showubbbutton}}">Genereer ubb</md-button>
-				<md-button ng-click="saveAndReset()">Nieuwe review</md-button>
-			</div>
-			</md-card>
-		</form>
-	</div>
-	<div ng-show="ubbGenerated" layout="row" layout-align="center center">
-		<span flex=10></span>
-		<md-card layout="column" flex> <md-card-content>
-		<div layout="row" layout-margin>
-			<div layout="column" flex>
-				<md-input-container> <label>UBB Code</label> <textarea id="ubbcode" ng-model="ubbcode"
-					cols="1"></textarea> </md-input-container>
-			</div>
-		</div>
-		</md-card-content>
-		<div class="md-actions" layout="row" layout-align="end center">
-			<md-button ng-click="showMovieData()">terug</md-button>
-			
-			<md-button ng-click="showToast()" id="clipboard" class="md-accent md-raised" aria-label="content cut" data-clipboard-target="#ubbcode">
-				Kopieer
-			</md-button>
-			
-			
-		</div>
-		</md-card>
-	</div>
+	<movie-Card ng-show="showMovieCard()" layout="row" layout-align="center center">
+	</movie-Card>
+	
+	<ubb-Card ng-show="ubbGenerated" layout="row" layout-align="center center">
+	</ubb-Card>
+
 	</md-content>
 	</div>
 	<!-- Angular Material Dependencies -->

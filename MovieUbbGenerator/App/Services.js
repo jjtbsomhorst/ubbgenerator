@@ -55,13 +55,22 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 		
 		this.reviews = [];
 		this.movies  = [];
+				
 		this.addReview = function(review){
 			
 			if(this.movies.indexOf(review.movie.imdbID) == -1){
 				this.movies.push(review.movie.imdbID);
 				this.reviews.push(review);
+			}else{
+				this.updateReview(review);
 			}
 		}
+		this.updateReview = function(review){
+			var index =this.movies.indexOf(review.movie.imdbID);
+			this.reviews[index] = review;
+			
+		}
+		
 		this.removeReview= function(review){
 			var index = this.movies.indexOf(review.movie.imdbID) 
 			if(index > -1){
@@ -90,40 +99,6 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 	if(instance == null){
 		instance = new service();
 	}
-	return instance;
-	
-//	service.reviews = [];
-//	service.movies = [];
-//	
-//	service.addReview = function(review){
-//		
-//		if(this.movies.indexOf(review.movie.imdbID) == -1){
-//			this.movies.push(review.movie.imdbID);
-//			this.reviews.push(review);
-//		}
-//	}
-//	
-//	service.removeReview= function(review){
-//		var index = this.movies.indexOf(review.movie.imdbID) 
-//		if(index > -1){
-//			this.movies.splice(index,1);
-//			this.reviews.splice(index,1);
-//		}
-//	}
-//	
-//	service.getReviews = function(){
-//		return this.reviews;
-//	}
-//	
-//	service.generateUbbCode =function(){
-//		var ubbcode = "";
-//		var self = this;
-//		this.reviews.every(function(entry){
-//			ubbcode  += self.generateUbbFromEntry(entry);
-//		});
-//		
-//		return ubbcode;
-//	}
-	
+	return instance;	
 	
 }])

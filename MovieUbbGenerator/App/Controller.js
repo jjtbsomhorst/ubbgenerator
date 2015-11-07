@@ -34,6 +34,15 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast','movieService','
 		}
 	});
 	
+	$scope.generateUbbFromList = function(){
+		$scope.ubbcode= reviewService.generateUbbCode();
+		$scope.ubbGenerated=true;
+	}
+	
+	$scope.removeFromList = function(review){
+		reviewService.removeReview(review);
+	}
+	
 	$scope.generateUbb = function(){
 		
 		if(reviewService.reviews.length == 0){
@@ -62,6 +71,13 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast','movieService','
 		$scope.ubbGenerated = false;
 		$scope.ubbcode=null;
 	}
+	
+	$scope.openReview = function(review){
+		$scope.reviewtext = review.reviewText;
+		$scope.reviewscore = review.reviewScore;
+		$scope.movie = review.movie;
+		$scope.ubbGenerated = false;
+	};
 	
 	$scope.showMovieCard = function(){
 		if($scope.hasOwnProperty('movie')){
@@ -96,7 +112,4 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast','movieService','
 		delete $scope.selectedMovie;	
 		delete $scope.searchText;
 	}
-	
-	//new Clipboard('#clipboard');
-	
 }]);

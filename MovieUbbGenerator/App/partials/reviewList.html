@@ -1,0 +1,11 @@
+<md-content layout-padding>
+<md-list>
+	<md-subheader class="md-no-sticky">Reviews</md-subheader>
+	<md-list-item ng-click="openReview(review)" ng-repeat="review in reviews">
+	    <p> {{ review.Title }} </p>
+	    <md-button class="md-icon-button md-secondary">
+	    	<md-icon ng-click="removeFromList(review)" md-font-set="material-icons"> clear </md-icon></md-button>
+	</md-list-item>
+</md-list>
+<md-button class="md-primary" ng-click="generateUbbFromList()" ng-disabled="reviews.length == 0">Genereer ubb</md-button>
+</md-content>
