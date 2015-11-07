@@ -34,6 +34,19 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast','movieService','
 		}
 	});
 	
+	$scope.$watch('reviewtext',function(n,o){
+		if(n != o && n!=null && n != "" && reviewService.hasReview($scope.movie.imdbID)){
+			reviewService.getReview($scope.movie.imdbID).reviewText = n;
+		}
+	});
+
+	$scope.$watch('reviewscore',function(n,o){
+		if(n!=o && n!=null && reviewService.hasReview($scope.movie.imdbID)){
+			reviewService.getReview($scope.movie.imdbID).reviewScore = n;
+		}
+	});
+	
+	
 	$scope.generateUbbFromList = function(){
 		$scope.ubbcode= reviewService.generateUbbCode();
 		$scope.ubbGenerated=true;

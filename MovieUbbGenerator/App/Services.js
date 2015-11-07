@@ -79,6 +79,15 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 			}
 		}
 		
+		this.getReview = function(imdbid){
+			var index = this.movies.indexOf(imdbid);
+			return this.reviews[index];
+		}
+		
+		this.hasReview = function(imdbid){
+			return (this.movies.indexOf(imdbid) > -1);
+		}
+		
 		this.getReviews = function(){
 			return this.reviews;
 		}
@@ -93,6 +102,9 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 			
 			return ubbcode;
 		}
+		
+		
+		
 	}
 	
 	
