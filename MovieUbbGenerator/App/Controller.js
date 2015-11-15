@@ -101,7 +101,7 @@ c.controller('reviewListController',['$scope','reviewService',function($scope,re
 	
 }]);
 
-c.controller('AppCtrl',['$scope','$location','$http','$mdToast','movieService','reviewService',function($scope,$location,$http,$mdToast,movieService,reviewService){
+c.controller('AppCtrl',['$scope','movieService',function($scope,movieService){
 		
 	$scope.copyaction = false;
 	
