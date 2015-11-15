@@ -105,10 +105,21 @@ c.controller('AppCtrl',['$scope','$location','$http','$mdToast','movieService','
 		}
 	});
 	
-	$scope.showToast = function(){
+	$scope.copyUbbCode = function(){
+		window.getSelection().removeAllRanges();
+		var node = document.querySelector("#ubbcode");
+		node.select();
+		var result = document.execCommand('copy');
+		var msg = "UBB Code kon niet worden gekopieerd.";
+		if(result){
+				msg = "UBB code succesvol naar klembord gekopieerd.";	
+		};
 		
-		$mdToast.show($mdToast.simple().content('UBB code succesvol naar klembord gekopieerd.'));
-	}
+		$mdToast.show($mdToast.simple().content(msg));
+		window.getSelection().removeAllRanges();
+		
+	};
+	
 	
 	$scope.saveAndReset = function(){
 		
