@@ -13,18 +13,21 @@ app.config(function($mdThemingProvider){
 app.directive('reviewList',function(){
 	return{
 		restrict: 'AEC',
-		templateUrl: 'App/partials/reviewList.html'
+		templateUrl: 'App/partials/reviewList.html',
+		controller: 'reviewListController'
 	}
 });
 app.directive('movieCard',function(){
 	return{
 		restrict: 'AEC',
-		templateUrl: 'App/partials/movieCard.html'
+		templateUrl: 'App/partials/movieCard.html',
+		controller: 'movieCardController',
 	}
 });
 app.directive('ubbCard',function(){
 	return{
 		restrict: 'AEC',
-		templateUrl: 'App/partials/UbbCard.html'
+		templateUrl: 'App/partials/UbbCard.html',
+		controller: 'ubbCardController'
 	}
 });
