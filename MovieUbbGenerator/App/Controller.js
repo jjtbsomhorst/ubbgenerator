@@ -101,22 +101,36 @@ c.controller('reviewListController',['$scope','reviewService',function($scope,re
 	
 }]);
 
-c.controller('AppCtrl',['$scope','movieService',function($scope,movieService){
+c.controller('AppCtrl',['$scope','reviewService','movieService',function($scope,reviewService,movieService){
 		
 	$scope.copyaction = false;
+	$scope.hasReviews = function(){
+		return !reviewService.isEmpty();
+	}
 	
 	$scope.getMovies = function(text){
 		$scope.showLoading=true
 		
-		text = text.replace(" ","+");
-		return movieService.getMovies(text).then(function(data){
+		var succes = function(data){
 			$scope.showLoading = false;
 			return data;
-		},function(response){
+		};
+		
+		var failure = function(data){
 			$scope.showLoading=false;
 			console.error('response failed');
 			console.error(response);
-		});
+		}
+		
+		if($scope.searchType == "movies"){
+			return movieService.getMovies(text).then(succes,failure);
+		}else{
+			return movieService.getSeries(text).then(succes,failure);
+		}
+		
+		
+		//text = text.replace(" ","+");
+		
 	}
 	
 	$scope.$watch('selectedMovie',function(n,o){
@@ -135,6 +149,7 @@ c.controller('AppCtrl',['$scope','movieService',function($scope,movieService){
 			}			
 		}
 	});
+	
 	
 	$scope.showMovieData = function(){
 		$scope.ubbGenerated = false;

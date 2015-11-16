@@ -1,12 +1,23 @@
 var services = angular.module('appServices',[]);
 services.factory('movieService',['$http','$q',function($http,$q){
 	var service = {};
-	service.baseUrlPlural = "api.php/movies/";
-	service.baseUrlSingle = "api.php/movie/";
-	service.getMovies = function(query){
+	service.baseUrlMoviePlural = "api.php/movies/";
+	service.baseUrlSeriesPlural = "api.php/series/";
+	service.baseUrlMovieSingle = "api.php/movie/";
+	
+	
+	service.search = function(type,query){
+		if(type == "movies"){
+			return getMovies(query);
+		}else{
+			return getSeries(query);
+		}
+	}
+	
+	service.getSeries = function(query){
 		var def = $q.defer();
 		
-		return $http.get(this.baseUrlPlural+query,{cache: true}).then(function(response){
+		return $http.get(this.baseUrlSeriesPlural+query,{cache: true}).then(function(response){
 			def.resolve(response.data.Search);
 			return def.promise;
 		},function(response){
@@ -14,10 +25,21 @@ services.factory('movieService',['$http','$q',function($http,$q){
 			return def.promise;
 		});
 	};
+	service.getMovies = function(query){
+		var def = $q.defer();
+		
+		return $http.get(this.baseUrlMoviePlural+query,{cache: true}).then(function(response){
+			def.resolve(response.data.Search);
+			return def.promise;
+		},function(response){
+			def.reject(response);
+			return def.promise;
+		});
+	}
 	
 	service.getDetails = function(query){
 		var def = $q.defer();
-		return $http.get(this.baseUrlSingle+query,{cache: true}).then(function(response){
+		return $http.get(this.baseUrlMovieSingle+query,{cache: true}).then(function(response){
 			def.resolve(response.data);
 			return def.promise;
 		},function(response){
@@ -61,14 +83,16 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 			if(this.movies.indexOf(review.movie.imdbID) == -1){
 				this.movies.push(review.movie.imdbID);
 				this.reviews.push(review);
+				this.saveToLocal();
 			}else{
 				this.updateReview(review);
 			}
+			
 		}
 		this.updateReview = function(review){
 			var index =this.movies.indexOf(review.movie.imdbID);
 			this.reviews[index] = review;
-			
+			this.saveToLocal();			
 		}
 		
 		this.removeReview= function(review){
@@ -77,6 +101,9 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 				this.movies.splice(index,1);
 				this.reviews.splice(index,1);
 			}
+			
+			this.saveToLocal();
+			
 		}
 		
 		this.getReview = function(imdbid){
@@ -86,6 +113,10 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 		
 		this.hasReview = function(imdbid){
 			return (this.movies.indexOf(imdbid) > -1);
+		}
+		
+		this.isEmpty = function(){
+			return (this.reviews.length == 0);
 		}
 		
 		this.getReviews = function(){
@@ -103,13 +134,28 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 			return ubbcode;
 		}
 		
+		this.saveToLocal = function(){
+			var data = {
+				movies: this.movies,
+				reviews: this.reviews
+			}
+			localStorage.setItem("movieReviews",JSON.stringify(data));
+		}
 		
+		this.setData = function(data){
+			this.movies = data.movies;
+			this.reviews = data.reviews;
+		};
 		
 	}
 	
 	
 	if(instance == null){
 		instance = new service();
+		var localData = localStorage.getItem("movieReviews");
+		if(localData != null){
+			instance.setData(JSON.parse(localData));
+		}
 	}
 	return instance;	
 	

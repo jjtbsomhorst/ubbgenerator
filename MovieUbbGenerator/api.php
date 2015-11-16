@@ -5,6 +5,43 @@ require 'config.php';
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim($config);
 $app->response->headers->set('Content-Type', 'application/json');
+
+$app->get('/series/:term',function($q)use($app){
+	preg_match("(tt\d{5,7})", $q,$matches);
+	if(empty($matches)){
+		$q = urlencode($q);
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_URL,"http://www.omdbapi.com/?type=series&s=".$q);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		if($response !== false){
+			$decodedResponse = json_decode($response,true);
+			if(array_key_exists('Response',$decodedResponse)){ // in case of error..
+				$response = array("Search"=>array());
+				$response = json_encode($response);
+			}
+	
+	
+			$app->response->setBody($response);
+			$app->response->setStatus(200);
+		}
+	}else{
+		$ch = curl_init();
+		curl_setopt($ch,CURLOPT_URL,"http://www.omdbapi.com/?i=".$q);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		if($response !== false){
+			$result = array();
+			$result['Search'] = array(0=> json_decode($response,true));
+			$app->response->setBody(json_encode($result));
+			$app->response->setStatus(200);
+		}
+	}
+});
+
+
 $app->get('/movies/:term',function($q)use($app){
 	
 	preg_match("(tt\d{5,7})", $q,$matches);
