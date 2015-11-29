@@ -16,8 +16,8 @@
 		<h2>Movie UBB Generator</h2>
 		<span flex="5"></span>
 		<div flex="60">
-			<md-autocomplete md-min-length="2" placeholder="Search a movie by title or IMDB id (tt..)" md-selected-item="selectedMovie"
-				md-delay="250" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getMovies(searchText)"
+			<md-autocomplete md-no-cache="true" md-min-length="2" placeholder="{{searchPlaceholder}}" md-selected-item="selectedMovie"
+				md-delay="250" md-search-text="searchText" md-items="item in getMovies(searchText)"
 				md-item-text="item.Title "> <md-item-template> <span md-highlight-text="searchText">{{item.Title}}
 				({{item.Year}})</span> </md-item-template> <md-not-found> No matches found. </md-not-found> </md-autocomplete>
 		</div>

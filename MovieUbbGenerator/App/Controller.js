@@ -105,10 +105,25 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 		
 	$scope.copyaction = false;
 	$scope.searchType = "movies";
+	$scope.searchPlaceholder = "Search a movie by title or IMDB id (tt..)";
+	$scope.service = movieService;
 	
 	$scope.hasReviews = function(){
 		return !reviewService.isEmpty();
 	}
+	
+	$scope.$watch('searchType',function(n,o){
+		switch(n){
+		case 'series':
+			$scope.service= seriesService;
+			break;
+		default:
+			$scope.service = movieService;
+		}
+		
+		$scope.searchText = '';
+		
+	});
 	
 	$scope.getMovies = function(text){
 		$scope.showLoading=true
@@ -124,13 +139,17 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 			console.error(response);
 		}
 		
-		if($scope.searchType == "movies"){
-			return movieService.search(text).then(succes,failure);
-		}else{
-			return seriesService.search(text).then(succes,failure);
-		}	
-		
+		return $scope.service.search(text).then(succes,failure);		
 	}
+	
+	
+	$scope.$watch('searchType',function(n,o){
+		if(n == 'movies'){
+			$scope.searchPlaceholder = "Search a movie by title or IMDB id (tt..)";
+		}else if(n == 'series'){
+			$scope.searchPlaceholder = "Search a serie by title or IMDB id (tt..)";
+		}
+	})
 	
 	$scope.$watch('selectedMovie',function(n,o){
 		
@@ -139,13 +158,7 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 			$scope.showLoading = false;
 			if(n.hasOwnProperty('imdbID')){
 				$scope.showLoading= true;
-				if($scope.searchTyp =='movies'){
-					var service = movieService;
-				}else{
-					var service = seriesService;
-				}
-				
-				service.getDetails(n.imdbID).then(function(response){
+				$scope.service.getDetails(n.imdbID).then(function(response){
 					$scope.movie = response;
 					$scope.showLoading = false;
 				},function(response){
