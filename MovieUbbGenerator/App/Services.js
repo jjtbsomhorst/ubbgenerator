@@ -8,7 +8,7 @@ services.factory('seriesService',['$http','$q',function($http,$q){
 	service.search = function(query){
 		var def = $q.defer();
 		
-		return $http.get(this.baseUrlPlural+query,{cache: true}).then(function(response){
+		return $http.get(this.baseUrlPlural+query).then(function(response){
 			def.resolve(response.data.Search);
 			return def.promise;
 		},function(response){
@@ -19,7 +19,7 @@ services.factory('seriesService',['$http','$q',function($http,$q){
 	
 	service.getDetails = function(query){
 		var def = $q.defer();
-		return $http.get(this.baseUrlSingle+query,{cache: true}).then(function(response){
+		return $http.get(this.baseUrlSingle+query).then(function(response){
 			def.resolve(response.data);
 			return def.promise;
 		},function(response){
@@ -39,7 +39,7 @@ services.factory('movieService',['$http','$q',function($http,$q){
 	service.search = function(query){
 		var def = $q.defer();
 		
-		return $http.get(this.baseUrlPlural+query,{cache: true}).then(function(response){
+		return $http.get(this.baseUrlPlural+query).then(function(response){
 			def.resolve(response.data.Search);
 			return def.promise;
 		},function(response){
@@ -50,7 +50,7 @@ services.factory('movieService',['$http','$q',function($http,$q){
 	
 	service.getDetails = function(query){
 		var def = $q.defer();
-		return $http.get(this.baseUrlSingle+query,{cache: true}).then(function(response){
+		return $http.get(this.baseUrlSingle+query).then(function(response){
 			def.resolve(response.data);
 			return def.promise;
 		},function(response){
