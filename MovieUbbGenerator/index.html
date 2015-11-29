@@ -3,8 +3,9 @@
 <head>
 <link rel="stylesheet" href="libs/angular_material/0.11.2/angular-material.min.css">
 <link rel="stylesheet" href="libs/fonts/robotodraft.css">
-<link rel="stylesheet" href="libs/fonts/material_icons.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="libs/fonts/font-awesome.min.css">
+<link rel="stylesheet" href="assets/app.css">
 <script src="libs/angularjs/1.4.6/angular.js" type="text/javascript"></script>
 <meta name="viewport" content="initial-scale=1" />
 </head>
@@ -20,10 +21,13 @@
 				md-item-text="item.Title "> <md-item-template> <span md-highlight-text="searchText">{{item.Title}}
 				({{item.Year}})</span> </md-item-template> <md-not-found> No matches found. </md-not-found> </md-autocomplete>
 		</div>
-		<md-switch ng-model="searchType" ng-true-value="'series'" ng-false-value="'movies'">
-  		<i class="material-icons">tv</i>
+		<span flex="5"></span>
+		<i class="{{searchType =='movies' ? 'material-icons' : 'material-icons active'}}">tv</i>
+		<md-switch ng-model="searchType" ng-true-value="'movies'" ng-false-value="'series'">
+		<li class="{{searchType =='series' ? 'material-icons' : 'material-icons active'}}">movie creation</li>
+  		
 </md-switch>
-	</span flex="20"></span>
+	</span flex="15"></span>
 	</div>
 	</md-toolbar>
 	
@@ -57,6 +61,7 @@
 	<!-- App specific stuff -->
 	<script src="App/Services.js" type="text/javascript"></script>
 	<script src="App/Controller.js" type="text/javascript"></script>
+	<script src="App/Directives.js" type="text/javascript"></script>
 	<script src="App/App.js" type="text/javascript"></script>
 </body>
 </html>

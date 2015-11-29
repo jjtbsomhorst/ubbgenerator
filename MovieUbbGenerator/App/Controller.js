@@ -101,9 +101,11 @@ c.controller('reviewListController',['$scope','reviewService',function($scope,re
 	
 }]);
 
-c.controller('AppCtrl',['$scope','reviewService','movieService',function($scope,reviewService,movieService){
+c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',function($scope,reviewService,movieService,seriesService){
 		
 	$scope.copyaction = false;
+	$scope.searchType = "movies";
+	
 	$scope.hasReviews = function(){
 		return !reviewService.isEmpty();
 	}
@@ -123,13 +125,10 @@ c.controller('AppCtrl',['$scope','reviewService','movieService',function($scope,
 		}
 		
 		if($scope.searchType == "movies"){
-			return movieService.getMovies(text).then(succes,failure);
+			return movieService.search(text).then(succes,failure);
 		}else{
-			return movieService.getSeries(text).then(succes,failure);
-		}
-		
-		
-		//text = text.replace(" ","+");
+			return seriesService.search(text).then(succes,failure);
+		}	
 		
 	}
 	
@@ -140,12 +139,20 @@ c.controller('AppCtrl',['$scope','reviewService','movieService',function($scope,
 			$scope.showLoading = false;
 			if(n.hasOwnProperty('imdbID')){
 				$scope.showLoading= true;
-				movieService.getDetails(n.imdbID).then(function(response){
+				if($scope.searchTyp =='movies'){
+					var service = movieService;
+				}else{
+					var service = seriesService;
+				}
+				
+				service.getDetails(n.imdbID).then(function(response){
 					$scope.movie = response;
 					$scope.showLoading = false;
 				},function(response){
 					$scope.showLoading = false;
 				});
+				
+				
 			}			
 		}
 	});
