@@ -24,7 +24,11 @@ c.controller('movieCardController',['$scope','reviewService','stylingService',fu
 		
 	
 	$scope.setMarkup = function(tag){
-		stylingService.addStyling(document.getElementById("reviewContent"),tag);
+		var updatedStyling = stylingService.addStyling(document.getElementById("reviewContent"),tag);
+		if(updatedStyling != null){
+			$scope.reviewtext = updatedStyling;
+		
+		}
 	}
 	
 	

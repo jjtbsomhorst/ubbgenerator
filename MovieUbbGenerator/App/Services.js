@@ -21,7 +21,7 @@ services.factory('stylingService',[function(){
 				elementContent += content;
 				elementContent += endTag;
 				elementContent += end;
-				node.value = elementContent;
+				return elementContent;
 			}
 		}
 	}
