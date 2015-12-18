@@ -1,5 +1,33 @@
 var services = angular.module('appServices',[]);
 
+services.factory('stylingService',[function(){
+	var s = {};
+	
+	s.addStyling = function(node, type){
+		var startTag = "";
+		var endTag = "";
+		var validTags = ['spoiler','b','s','i','u'];
+		if(validTags.indexOf(type) >= 0  && node != null){
+			startTag = "["+type+"]";
+			endTag = "[/"+type+"]";
+			
+			if(node != null){
+				var elementContent =node.value;
+				var start = elementContent.substring(0,node.selectionStart);
+				var	content = elementContent.substring(node.selectionStart,node.selectionEnd);
+				var end = elementContent.substring(node.selectionEnd);
+				elementContent = start;
+				elementContent += startTag;
+				elementContent += content;
+				elementContent += endTag;
+				elementContent += end;
+				node.value = elementContent;
+			}
+		}
+	}
+	return s;
+}]);
+
 services.factory('seriesService',['$http','$q',function($http,$q){
 	var service = {};
 	service.baseUrlPlural = "api.php/series/";

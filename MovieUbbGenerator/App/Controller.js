@@ -1,6 +1,9 @@
 var c = angular.module('appControllers',['ngMaterial','ngMessages','appServices']);
 
 c.controller('ubbCardController',['$scope','$mdToast',function($scope,$mdToast){
+	
+	
+	
 	$scope.copyUbbCode = function(){
 		window.getSelection().removeAllRanges();
 		var node = document.querySelector("#ubbcode");
@@ -17,8 +20,14 @@ c.controller('ubbCardController',['$scope','$mdToast',function($scope,$mdToast){
 	};
 }]);
 
-c.controller('movieCardController',['$scope','reviewService',function($scope,reviewService){
+c.controller('movieCardController',['$scope','reviewService','stylingService',function($scope,reviewService,stylingService){
 		
+	
+	$scope.setMarkup = function(tag){
+		stylingService.addStyling(document.getElementById("reviewContent"),tag);
+	}
+	
+	
 	$scope.generateUbb = function(){
 		
 		if(reviewService.reviews.length == 0){
