@@ -2,10 +2,14 @@ var c = angular.module('appControllers',['ngMaterial','ngMessages','appServices'
 
 c.controller('moviePosterController',['$scope','posterService','$mdToast',function($scope,service,$mdToast){
 	
+	$scope.loading = true;
+	
 	service.getPosters().then(function(data){
 		$scope.posters = data;
 		$mdToast.show($mdToast.simple().content('Succesfully loaded '+data.length+' movie posters'));
+		$scope.loading=false;
 	},function(){
+		$scope.loading=false;
 		$mdToast.show($mdToast.simple().content('Could not load movie posters'));
 	});
 	
