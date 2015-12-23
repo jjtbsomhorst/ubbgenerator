@@ -6,6 +6,27 @@ require 'config.php';
 $app = new \Slim\Slim($config);
 $app->response->headers->set('Content-Type', 'application/json');
 
+$app->get('/posters',function()use($app){
+	
+	$conn = new PDO("mysql:host=".$app->config('db.host').";dbname=".$app->config('db.name').";charset=utf8", $app->config('db.username'), $app->config('db.password'));
+	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	
+	$stmt = $conn->prepare('SELECT * from posters order by rand()');
+	$posters = array();
+	if($stmt->execute()){
+		while($row = $stmt->fetch(PDO::FETCH_BOTH)){
+			$poster = array();
+			$poster['imdbid'] = $row['imbdid'];
+			$poster['image'] = $row['fileid'].".jpg";
+			$poster['imdburl'] = "http://www.imdb.com/title/".$row['imbdid'];
+			$posters[] = $poster;
+		}
+	}
+	$app->response->setBody(json_encode($posters));
+	$app->response->setStatus(200);
+	
+});
+
 $app->get('/series/:term',function($q)use($app){
 	preg_match("(tt\d{5,7})", $q,$matches);
 	if(empty($matches)){

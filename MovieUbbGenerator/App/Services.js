@@ -1,5 +1,29 @@
 var services = angular.module('appServices',[]);
 
+services.factory('posterService',['$http','$q',function($http,$q){
+	var s = {};
+	s.cache = null;
+	s.baseUrl = "api.php/posters";
+	
+	s.getPosters = function(){
+		var def  = $q.defer();
+		if(this.cache == null){
+			$http.get(this.baseUrl).then(function(data){
+				this.cache = data.data;
+				def.resolve(this.cache);
+			},function(data){
+				def.reject(data);
+			});
+			return def.promise;
+		}else{
+			def.resolve(this.cache);
+		}
+		
+	}
+	return s;
+}
+]);
+
 services.factory('stylingService',[function(){
 	var s = {};
 	

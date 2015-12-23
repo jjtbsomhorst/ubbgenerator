@@ -1,9 +1,16 @@
 var c = angular.module('appControllers',['ngMaterial','ngMessages','appServices']);
 
+c.controller('moviePosterController',['$scope','posterService','$mdToast',function($scope,service,$mdToast){
+	
+	service.getPosters().then(function(data){
+		$scope.posters = data;
+	},function(){
+		$mdToast.show($mdToast.simple().content('Could not load movie posters'));
+	});
+	
+	
+}]);
 c.controller('ubbCardController',['$scope','$mdToast',function($scope,$mdToast){
-	
-	
-	
 	$scope.copyUbbCode = function(){
 		window.getSelection().removeAllRanges();
 		var node = document.querySelector("#ubbcode");
