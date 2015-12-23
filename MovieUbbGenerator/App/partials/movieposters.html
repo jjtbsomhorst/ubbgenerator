@@ -1,0 +1,9 @@
+	<md-grid-list data-md-cols-sm="2" data-md-cols-md="4" data-md-cols="8" data-md-gutter="5px" md-row-height="280px">
+		<md-grid-tile ng-repeat="poster in posters" md-colspan="1" md-rowspan="1">
+			<md-card>
+				<a href="{{poster.imdburl}}" target="_blank">
+				<img ng-src="images/{{poster.image}}"></img>
+				</a>
+				</md-card>
+		</md-grid-tile>
+	</md-grid-list>

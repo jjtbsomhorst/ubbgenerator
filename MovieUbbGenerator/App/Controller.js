@@ -4,6 +4,7 @@ c.controller('moviePosterController',['$scope','posterService','$mdToast',functi
 	
 	service.getPosters().then(function(data){
 		$scope.posters = data;
+		$mdToast.show($mdToast.simple().content('Succesfully loaded '+data.length+' movie posters'));
 	},function(){
 		$mdToast.show($mdToast.simple().content('Could not load movie posters'));
 	});
