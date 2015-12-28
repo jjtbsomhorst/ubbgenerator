@@ -20,6 +20,7 @@ services.factory('posterService',['$http','$q',function($http,$q){
 		}
 		
 	}
+	console.log('return posterservice');
 	return s;
 }
 ]);
@@ -49,6 +50,8 @@ services.factory('stylingService',[function(){
 			}
 		}
 	}
+	
+	console.log('return stylingService');
 	return s;
 }]);
 
@@ -79,6 +82,9 @@ services.factory('seriesService',['$http','$q',function($http,$q){
 			return def.promise;
 		});
 	};
+	
+	console.log('return seriesService');
+	
 	return service;
 	
 }]);
@@ -110,6 +116,8 @@ services.factory('movieService',['$http','$q',function($http,$q){
 			return def.promise;
 		});
 	};
+	console.log('return movieService');
+	
 	return service;
 }]);
 

@@ -21,9 +21,9 @@ c.controller('ubbCardController',['$scope','$mdToast',function($scope,$mdToast){
 		var node = document.querySelector("#ubbcode");
 		node.select();
 		var result = document.execCommand('copy');
-		var msg = "UBB Code kon niet worden gekopieerd.";
+		var msg = "UBB Code could not be copied to clipboard";
 		if(result){
-				msg = "UBB code succesvol naar klembord gekopieerd.";	
+				msg = "UBB code succesfully copied to clipboard.";	
 		};
 		
 		$mdToast.show($mdToast.simple().content(msg));
@@ -34,12 +34,10 @@ c.controller('ubbCardController',['$scope','$mdToast',function($scope,$mdToast){
 
 c.controller('movieCardController',['$scope','reviewService','stylingService',function($scope,reviewService,stylingService){
 		
-	
 	$scope.setMarkup = function(tag){
 		var updatedStyling = stylingService.addStyling(document.getElementById("reviewContent"),tag);
 		if(updatedStyling != null){
 			$scope.reviewtext = updatedStyling;
-		
 		}
 	}
 	
@@ -133,22 +131,21 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 	$scope.searchPlaceholder = "Search a movie by title or IMDB id (tt..)";
 	$scope.service = movieService;
 	
-	$scope.hasReviews = function(){
-		return !reviewService.isEmpty();
-	}
-	
-	$scope.$watch('searchType',function(n,o){
-		switch(n){
+	$scope.onChange = function(data){
+		debugger;
+		switch(data){
 		case 'series':
 			$scope.service= seriesService;
+			$scope.searchPlaceholder = "Search a serie by title or IMDB id (tt..)";
 			break;
 		default:
 			$scope.service = movieService;
+			$scope.searchPlaceholder = "Search a movie by title or IMDB id (tt..)";
 		}
-		
 		$scope.searchText = '';
-		
-	});
+	}
+	
+	
 	
 	$scope.getMovies = function(text){
 		$scope.showLoading=true
@@ -166,15 +163,6 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 		
 		return $scope.service.search(text).then(succes,failure);		
 	}
-	
-	
-	$scope.$watch('searchType',function(n,o){
-		if(n == 'movies'){
-			$scope.searchPlaceholder = "Search a movie by title or IMDB id (tt..)";
-		}else if(n == 'series'){
-			$scope.searchPlaceholder = "Search a serie by title or IMDB id (tt..)";
-		}
-	})
 	
 	$scope.$watch('selectedMovie',function(n,o){
 		

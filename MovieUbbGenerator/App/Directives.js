@@ -22,3 +22,12 @@ d.directive('ubbCard',function(){
 		controller: 'ubbCardController'
 	}
 });
+
+d.directive('lazyImage',function(){
+	return{
+		restrict: 'C',
+		controller: function(){
+			
+		},
+	}
+});
