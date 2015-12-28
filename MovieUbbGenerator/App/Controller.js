@@ -132,7 +132,6 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 	$scope.service = movieService;
 	
 	$scope.onChange = function(data){
-		debugger;
 		switch(data){
 		case 'series':
 			$scope.service= seriesService;
