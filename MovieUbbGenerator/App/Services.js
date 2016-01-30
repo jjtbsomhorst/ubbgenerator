@@ -142,7 +142,7 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 			ubbcode += "[url=\""+youtubelink+"\"][img=16,16,,left,\"\"]http://www.jeroensomhorst.eu/ubbgenerator/assets/youtube.png[/img][/url]";
 			ubbcode += "[img=,24,,,,]"+starUrl+"[/img]";
 			ubbcode += "[b]"+review.reviewScore+"[/b] / 10[/small][/td][/tr][/table]";
-			ubbcode += "[sub][url=http://www.jeroensomhorst.eu/ubbgenerator/]Genereer je eigen UBB code review[/url][/sub]";
+			
 			return ubbcode;
 		} 
 		
@@ -198,7 +198,7 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 				ubbcode  += this.generateUbbFromEntry(this.reviews[i]);
 			}
 			
-			
+			ubbcode += "[sub][url=http://www.jeroensomhorst.eu/ubbgenerator/]Genereer je eigen UBB code review[/url][/sub]";
 			return ubbcode;
 		}
 	}

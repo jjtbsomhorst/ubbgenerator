@@ -55,6 +55,7 @@ $app->get('/series/:term',function($q)use($app){
 		curl_close($ch);
 		if($response !== false){
 			$result = array();
+			
 			$result['Search'] = array(0=> json_decode($response,true));
 			$app->response->setBody(json_encode($result));
 			$app->response->setStatus(200);
@@ -74,8 +75,9 @@ $app->get('/movies/:term',function($q)use($app){
 		$response = curl_exec($ch);
 		curl_close($ch);
 		if($response !== false){
+			
 			$decodedResponse = json_decode($response,true);
-			if(array_key_exists('Response',$decodedResponse)){ // in case of error..
+			if(array_key_exists('Response',$decodedResponse) && $decodedResponse['Response'] == "False"){ // in case of error..
 				$response = array("Search"=>array());
 				$response = json_encode($response);
 			}
