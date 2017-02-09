@@ -32,7 +32,7 @@ c.controller('ubbCardController',['$scope','$mdToast',function($scope,$mdToast){
 	};
 }]);
 
-c.controller('movieCardController',['$scope','reviewService','stylingService',function($scope,reviewService,stylingService){
+c.controller('movieCardController',['$scope','convertService','stylingService','reviewService','$location',function($scope,convertService,stylingService,reviewService,$location){
 		
 	$scope.setMarkup = function(tag){
 		var updatedStyling = stylingService.addStyling(document.getElementById("reviewContent"),tag);
@@ -41,29 +41,24 @@ c.controller('movieCardController',['$scope','reviewService','stylingService',fu
 		}
 	}
 	
-	
-	$scope.generateUbb = function(){
+	$scope.generateMarkup = function(){
+		var format = "ubb";
 		
-		if(reviewService.reviews.length == 0){
-			$scope.ubbcode = reviewService.generateUbbFromEntry({
-				Title: $scope.movie.Title,
-				reviewScore: $scope.reviewscore,
-				reviewText: $scope.reviewtext,
-				movie: $scope.movie
-			});
-			$scope.ubbGenerated= true;
-		}else{
-			
-			reviewService.addReview({
-				Title: $scope.movie.Title,
-				reviewScore: $scope.reviewscore,
-				reviewText: $scope.reviewtext,
-				movie: $scope.movie
-			});
-			
-			$scope.ubbcode = reviewService.generateUbbCode();
-			$scope.ubbGenerated=true;
+		var queryParams = $location.search();
+		if(queryParams.hasOwnProperty('format')){
+			format = queryParams.format;
 		}
+
+		reviewService.addReview({
+				Title: $scope.movie.Title,
+				reviewScore: $scope.reviewscore,
+				reviewText: $scope.reviewtext,
+				movie: $scope.movie
+			});
+			
+		$scope.ubbcode = stylingService.convert(convertService.generateUbbCode(format,reviewService.getReviews()));
+		$scope.ubbGenerated=true;
+		
 	}
 		
 	$scope.saveAndReset = function(){
@@ -102,9 +97,9 @@ c.controller('movieCardController',['$scope','reviewService','stylingService',fu
 	
 }]);
 
-c.controller('reviewListController',['$scope','reviewService',function($scope,reviewService){
+c.controller('reviewListController',['$scope','reviewService','convertService','stylingService','$location',function($scope,reviewService,convertService,stylingService,$location){
 	
-	$scope.reviews = reviewService.reviews;
+	$scope.reviews = reviewService.getReviews();
 	
 	$scope.removeFromList = function(review){
 		reviewService.removeReview(review);
@@ -118,7 +113,13 @@ c.controller('reviewListController',['$scope','reviewService',function($scope,re
 	};
 	
 	$scope.generateUbbFromList = function(){
-		$scope.ubbcode= reviewService.generateUbbCode();
+		debugger;
+		var queryParams = $location.search();
+		var format = "ubb";
+		if(queryParams.hasOwnProperty('format')){
+			format = queryParams.format;
+		}
+		$scope.ubbcode = stylingService.convert(convertService.generateUbbCode(format,reviewService.getReviews()));
 		$scope.ubbGenerated=true;
 	}
 	
@@ -130,6 +131,7 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 	$scope.searchType = "movies";
 	$scope.searchPlaceholder = "Search a movie by title or IMDB id (tt..)";
 	$scope.service = movieService;
+	$scope.canPersist = true;
 	
 	$scope.onChange = function(data){
 		switch(data){
@@ -163,6 +165,8 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 		return $scope.service.search(text).then(succes,failure);		
 	}
 	
+
+
 	$scope.$watch('selectedMovie',function(n,o){
 		
 		if(n!=o && n!=null){
@@ -176,12 +180,19 @@ c.controller('AppCtrl',['$scope','reviewService','movieService','seriesService',
 				},function(response){
 					$scope.showLoading = false;
 				});
-				
-				
 			}			
 		}
 	});
 	
+	$scope.$watch('ubbGenerated',function(n,o){
+		if(n!=o && n!=null){
+			if(n && $scope.canPersist){
+				console.log('Can persist..');
+				reviewService.persistReviews();
+			}
+		}
+	});
+
 	
 	$scope.showMovieData = function(){
 		$scope.ubbGenerated = false;

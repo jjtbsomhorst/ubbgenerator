@@ -1,44 +1,43 @@
-		<form ng-submit="generateUbb()">
-			<md-card layout="column" flex="66"> <md-card-content>
-			<div layout="row" layout-margin>
-				<div layout="column" layout-margin>
-					<img ng-src="{{movie.Poster}}" class="md-card-image">
-				</div>
-				<div layout="column" flex="75">
-					<div layout="row">
-						<h3>{{movie.Title}}</h3>
-						<br />
-					</div>
-					<div layout="row">
-						<span class="md-caption"><b>imdb</b>: <a target="blank" href="http://www.imdb.com/title/{{movie.imdbID}}">{{movie.imdbRating}}</a> | <b>Genre</b>: {{movie.Genre}} | <b>Released</b>: {{movie.Year}}</span>
-					</div>
-					<div layout="row"></div>
-					<div layout="row" layout-margin>
-						<p>{{movie.Plot}}</p>
-					</div>
-				</div>
-			</div>
-			
-			<div layout="row">
-				<md-button type='button' ng-click="setMarkup('spoiler')"><i class="material-icons">visibility_off</i></md-button>
-				<md-button type='button' ng-click="setMarkup('b')"><i class="material-icons">format_bold</i></md-button>
-				<md-button type='button' ng-click="setMarkup('i')"><i class="material-icons">format_italic</i></md-button>
-				<md-button type='button' ng-click="setMarkup('s')"><i class="material-icons">format_strikethrough</i></md-button>
-				<md-button type='button' ng-click="setMarkup('u')"><i class="material-icons">format_underlined</i></md-button>
-			</div>
-			
-			<div layout="row">
-				<md-input-container layout="column" flex="100"> <label>Review</label> <textarea id="reviewContent" ng-model="reviewtext" required></textarea>
-				</md-input-container>
-			</div>
-			<div layout="row">
-				<md-input-container> <label>Score ( {{reviewscore}} / 10)</label> <input type="number" ng-model="reviewscore"
-					value="0" max="10" min="0" step="0.5" required></input> </md-input-container>
-			</div>
-			</md-card-content>
-			<div class="md-actions" layout="row" layout-align="end center">
-				<md-button type="submit" class="md-accent md-raised" ng-disabled="{{showubbbutton}}">Genereer ubb</md-button>
-				<md-button ng-click="saveAndReset()">Nieuwe review</md-button>
-			</div>
-			</md-card>
-		</form>
+
+<md-card layout="column" flex="66"> <md-card-content>
+<div layout="row" layout-margin>
+	<div layout="column" layout-margin>
+		<img ng-src="{{movie.Poster}}" class="md-card-image">
+	</div>
+	<div layout="column" flex="75">
+		<div layout="row">
+			<h3>{{movie.Title}}</h3>
+			<br />
+		</div>
+		<div layout="row">
+			<span class="md-caption"><b>imdb</b>: <a target="blank" href="http://www.imdb.com/title/{{movie.imdbID}}">{{movie.imdbRating}}</a> | <b>Genre</b>: {{movie.Genre}} | <b>Released</b>: {{movie.Year}}</span>
+		</div>
+		<div layout="row"></div>
+		<div layout="row" layout-margin>
+			<p>{{movie.Plot}}</p>
+		</div>
+	</div>
+</div>
+
+<div layout="row">
+	<md-button type='button' ng-click="setMarkup('spoiler')"><i class="material-icons">visibility_off</i></md-button>
+	<md-button type='button' ng-click="setMarkup('b')"><i class="material-icons">format_bold</i></md-button>
+	<md-button type='button' ng-click="setMarkup('i')"><i class="material-icons">format_italic</i></md-button>
+	<md-button type='button' ng-click="setMarkup('s')"><i class="material-icons">format_strikethrough</i></md-button>
+	<md-button type='button' ng-click="setMarkup('u')"><i class="material-icons">format_underlined</i></md-button>
+</div>
+
+<div layout="row">
+	<md-input-container layout="column" flex="100"> <label>Review</label> <textarea id="reviewContent" ng-model="reviewtext" required></textarea>
+	</md-input-container>
+</div>
+<div layout="row">
+	<md-input-container> <label>Score ( {{reviewscore}} / 10)</label> <input type="number" ng-model="reviewscore"
+		value="0" max="10" min="0" step="0.5" required></input> </md-input-container>
+</div>
+</md-card-content>
+<div class="md-actions" layout="row" layout-align="end center">
+	<md-button ng-click="generateMarkup()" class="md-accent md-raised" ng-disabled="{{showubbbutton}}">Genereer opmaak</md-button>
+	<md-button ng-click="saveAndReset()">Nieuwe review</md-button>
+</div>
+</md-card>

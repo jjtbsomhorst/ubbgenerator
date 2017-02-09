@@ -1,9 +1,10 @@
 <?php
 $config = array(
-	'imagepath'=>'/var/www/html/MovieUbbGenerator/images/',
+	'imagepath'=>'C://xampp//htdocs//ubbgenerator//images//',
 	'db.host'=>'localhost',
 	'db.username'=>'root',
-	'db.password'=>'root',
-	'db.name' => 'moviedb'
+	'db.password'=>'',
+	'db.name' => 'jeroen01_moviedb',
+	'api.baseurl'=> 'http://svr2.omdbapi.com'
 )
 ?>

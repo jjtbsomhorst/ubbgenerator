@@ -25,33 +25,128 @@ services.factory('posterService',['$http','$q',function($http,$q){
 }
 ]);
 
-services.factory('stylingService',[function(){
-	var s = {};
+services.factory('stylingService',['$location',function($location){
 	
-	s.addStyling = function(node, type){
-		var startTag = "";
-		var endTag = "";
-		var validTags = ['spoiler','b','s','i','u'];
-		if(validTags.indexOf(type) >= 0  && node != null){
-			startTag = "["+type+"]";
-			endTag = "[/"+type+"]";
-			
-			if(node != null){
-				var elementContent =node.value;
-				var start = elementContent.substring(0,node.selectionStart);
-				var	content = elementContent.substring(node.selectionStart,node.selectionEnd);
-				var end = elementContent.substring(node.selectionEnd);
-				elementContent = start;
-				elementContent += startTag;
-				elementContent += content;
-				elementContent += endTag;
-				elementContent += end;
-				return elementContent;
+	var HtmlStylingService = function(){
+		this.addStyling = function(node,type){
+			var startTag = "";
+			var endTag = "";
+			var validTags = ['spoiler','b','s','i','u'];
+			if(validTags.indexOf(type) >= 0  && node != null){
+				startTag = "["+type+"]";
+				endTag = "[/"+type+"]";
+				
+				if(node != null){
+					var elementContent =node.value;
+					var start = elementContent.substring(0,node.selectionStart);
+					var	content = elementContent.substring(node.selectionStart,node.selectionEnd);
+					var end = elementContent.substring(node.selectionEnd);
+					elementContent = start;
+					elementContent += startTag;
+					elementContent += content;
+					elementContent += endTag;
+					elementContent += end;
+					return elementContent;
+				}
 			}
 		}
+
+		this.convert = function(text){
+			text = text.replace("[spoiler]","<font style=\"background-color: black\">");
+			text = text.replace("[/spoiler]","</font>");
+
+			text = text.replace("[b]","<strong>");
+			text = text.replace("[/b]","</strong>");
+
+			text = text.replace("[s]","<s>");
+			text = text.replace("[/s]","</s>");			
+
+			text = text.replace("[i]","<i>");
+			text = text.replace("[/i]","</i>");			
+
+			text = text.replace("[u]","<u>");
+			text = text.replace("[/u]","</u>");			
+
+			return text;
+		}
+	};
+
+	var UbbStylingService = function(){
+
+		this.convert = function(text){
+			return text;
+		}
+
+		this.addStyling = function(node,type){
+			var startTag = "";
+			var endTag = "";
+			var validTags = ['spoiler','b','s','i','u'];
+			if(validTags.indexOf(type) >= 0  && node != null){
+				startTag = "["+type+"]";
+				endTag = "[/"+type+"]";
+				
+				if(node != null){
+					var elementContent =node.value;
+					var start = elementContent.substring(0,node.selectionStart);
+					var	content = elementContent.substring(node.selectionStart,node.selectionEnd);
+					var end = elementContent.substring(node.selectionEnd);
+					elementContent = start;
+					elementContent += startTag;
+					elementContent += content;
+					elementContent += endTag;
+					elementContent += end;
+					return elementContent;
+				}
+			}
+		}
+
 	}
+
+
+
+
+	var s = new function s(){
+
+		this.factories = {};
+
+		this.getFormat = function(){
+			var queryParams = $location.search();
+			var format = "ubb";
+			if(queryParams.hasOwnProperty('format')){
+				format = queryParams.format;
+			}
+			return format;
+		}
+
+		this.factories.html = new HtmlStylingService();
+		this.factories.ubb = new UbbStylingService();
+
+		this.getFactory = function(){
+			var factory = this.factories.ubb;
+			var format = this.getFormat();
+			if(this.factories.hasOwnProperty(format)){
+				factory = this.factories[format];
+			}
+
+			return factory;
+		}
+
+		this.addStyling = function(node,type){
+			return this.getFactory().addStyling(node,type);
+		}
+		this.convert = function(text){
+			return this.getFactory().convert(text);
+		}
+
+	}
+
 	
-	console.log('return stylingService');
+	
+
+	
+	
+
+
 	return s;
 }]);
 
@@ -121,12 +216,136 @@ services.factory('movieService',['$http','$q',function($http,$q){
 	return service;
 }]);
 
-services.factory('reviewService',['$http','$q',function($http,$q){
+services.factory('reviewService',['$http','$q','$rootScope',function($http,$q,$scope){
+	$scope.reviews = [];
+	$scope.movies = [];
+
+	function addMovie(review){
+		if($scope.movies.indexOf(review.movie.imdbID) == -1){
+			$scope.movies.push(review.movie.imdbID);
+			$scope.reviews.push(review);
+		}else{
+			updateReview(review);
+		}
+	}
+
+	function updateReview(review){
+			var index = $scope.movies.indexOf(review.movie.imdbID);
+			var prevReview = $scope.reviews[index];
+			if(prevReview.hasOwnProperty('reviewId')){
+				review.reviewId = prevReview.reviewId;
+			}
+			$scope.reviews[index] = review;		
+	}
+
+	function getReviews(){
+		return $scope.reviews;
+	}
+
+	function getReview(imdbid){
+			var index = $scope.movies.indexOf(imdbid);
+			return $scope.reviews[index];
+		}
+
+	function remove(review){
+		var index = $scope.movies.indexOf(review.movie.imdbID) 
+		if(index > -1){
+			$scope.movies.splice(index,1);
+			$scope.reviews.splice(index,1);
+		}
+	}
+
+	function hasReview(imdbid){
+		return ($scope.movies.indexOf(imdbid) > -1);
+	}
+
+	function persist(){
+	
+		$scope.reviews.forEach(function(item,index){
+			if(!item.hasOwnProperty('reviewId')){
+				$http.post('api.php/review',item).success(function(data,status,headers,config){
+					debugger;
+					if(hasReview(data.movie.imdbID)){
+						updateReview(data);
+					}
+				}).then(function(response){
+					console.log('kapot');
+				});
+			}
+			
+		});
+		
+
+	}
+
+	return {
+		addReview: addMovie,
+		updateReview: updateReview,
+		getReviews: getReviews,
+		getReview: getReview,
+		removeReview: remove,
+		hasReview: hasReview,
+		persistReviews: persist
+	}
+}]);
+
+services.factory('convertService',['$http','$q',function($http,$q){
 	var instance = null;
 	
+	var HtmlGenerator = function(){
+		
+		this.generateMarkupFromEntry = function(review){
+			var imdbLink = "http://www.imdb.com/title/"+review.movie.imdbID;
+			var wikiLink = "https://en.wikipedia.org/w/index.php?search="+review.movie.Title+" (film)";
+			var youtubelink = "https://www.youtube.com/results?search_query=trailer+"+review.movie.Title.replace(" ","+")+"+official+"+review.movie.Year;
+			var starUrl = "http://www.jeroensomhorst.eu/ubbgenerator/assets/stars/"+review.reviewScore+".png";
+			var posterurl = "http://www.jeroensomhorst.eu/ubbgenerator/"+review.movie.Poster;
+			var html = "";
+			html += "<table class=\"nocontrast rml\" style=\"width:100%;background-color:transparent\" cellspacing=\"0\" cellpadding=\"6\">";
+			html += "<tbody>";
+			html += "<tr>";
+			html += "<td style=\"font-size:14px\"><a href=\"\" rel=\"external nofollow\" title=\"IMDb -- "+review.movie.Title+" ("+review.movie.Year+")\" target=\"_blank\"><b>"+review.movie.Title+"</b> ("+review.movie.Year+")</a></td>";
+			html += "<td style=\"font-size:9px\" rowspan=\"2\" align=\"right\" valign=\"top\">";
+			html += "<a href=\""+posterurl+"\" rel=\"external nofollow\" target=\"_blank\">";
+			html += "<img class=\"rml border resized\" width=\"110\" height=\"163\" alt=\""+review.movie.Title+" "+review.movie.Year+"\" title=\""+review.movie.Title+" ("+review.movie.Year+")\" src=\""+posterurl+"\" data-lazyimg=\"1\"></a>";
+			html += "</td></tr><tr>";
+			html += "<td valign=\"top\"><small><b>IMDb:</b> "+review.movie.imdbRating+" | <b>Genre:</b> "+review.movie.Genre+" | <b>Runtime:</b> "+review.movie.Runtime+" | <b><abbr title=\"Motion Picture Association of America\">MPAA</abbr>:</b> "+review.movie.Rated+"</small>";
+			html += "<hr class=\"noshade\">";
+			html += "<div style=\"text-align:justify\">"+review.reviewText+"</div>";
+			html += "</td>";
+			html += "</tr>";
+			html += "<tr>";
+			html += "<td colspan=\"2\" align=\"right\">";
+			html += "<small>";
+			html += "<a href=\""+imdbLink+"\" rel=\"external nofollow\" target=\"_blank\">";
+			html += "<img src=\"http://www.jeroensomhorst.eu/ubbgenerator/assets/imdb.png\" class=\"rml left\" width=\"16\" height=\"16\" alt=\"\">";
+			html += "</a>";
+			html += "<a href=\""+wikiLink+"\" rel=\"external nofollow\" target=\"_blank\">";
+			html += "<img src=\"http://www.jeroensomhorst.eu/ubbgenerator/assets/wikipedia.png\" class=\"rml left\" width=\"16\" height=\"16\" alt=\"\">";
+			html += "</a>";
+			html += "<a href=\""+youtubelink+"\" rel=\"external nofollow\" target=\"_blank\">";
+			html += "<img src=\"http://www.jeroensomhorst.eu/ubbgenerator/assets/youtube.png\" class=\"rml left\" width=\"16\" height=\"16\" alt=\"\">";
+			html += "</a>";
+			html += "<img src=\""+starUrl+"\" class=\"rml\" width=\"228\" height=\"24\" alt=\"\">";
+			html += "<b>"+review.reviewScore+"</b> / 10";
+			html += "</small>";
+			html += "</td>";
+			html += "</tr>";
+			html += "</tbody>";
+			html += "</table>";
+			
+			return html;
+		}
+		
+		this.getAdvertiseLink = function(){
+			return "<p><sub><a href='http://www.jeroensomhorst.eu/ubbgenerator/#?format=html'>Genereer je eigen HTML code review</a></sub>";
+		}
+		
+	};
 	
-	var service = function Service(){
-		this.generateUbbFromEntry = function(review){
+	var UbbGenerator = function(){
+		
+		this.generateMarkupFromEntry = function(review){
 			var imdbLink = "http://www.imdb.com/title/"+review.movie.imdbID;
 			var wikiLink = "https://en.wikipedia.org/w/index.php?search="+review.movie.Title+" (film)";
 			var youtubelink = "https://www.youtube.com/results?search_query=trailer+"+review.movie.Title.replace(" ","+")+"+official+"+review.movie.Year;
@@ -144,61 +363,44 @@ services.factory('reviewService',['$http','$q',function($http,$q){
 			ubbcode += "[b]"+review.reviewScore+"[/b] / 10[/small][/td][/tr][/table]";
 			
 			return ubbcode;
+		}
+		
+		this.getAdvertiseLink = function(){
+			return "[sub][url=http://www.jeroensomhorst.eu/ubbgenerator/#?format=ubb]Genereer je eigen UBB code review[/url][/sub]";
+		}
+	};
+	
+	
+	var service = function Service(){
+		
+		this.factories = {};
+		this.factories.html = new HtmlGenerator();
+		this.factories.ubb = new UbbGenerator();
+		
+		
+		
+		this.generateUbbFromEntry = function(review,format){
+			
+			if(this.factories.hasOwnProperty(format)){
+				return this.factories[format].generateMarkupFromEntry(review);
+			}
 		} 
 		
-		this.reviews = [];
-		this.movies  = [];
-				
-		this.addReview = function(review){
-			
-			if(this.movies.indexOf(review.movie.imdbID) == -1){
-				this.movies.push(review.movie.imdbID);
-				this.reviews.push(review);
-			}else{
-				this.updateReview(review);
-			}
-			
-		}
-		this.updateReview = function(review){
-			var index =this.movies.indexOf(review.movie.imdbID);
-			this.reviews[index] = review;
-			
-		}
 		
-		this.removeReview= function(review){
-			var index = this.movies.indexOf(review.movie.imdbID) 
-			if(index > -1){
-				this.movies.splice(index,1);
-				this.reviews.splice(index,1);
-			}
-					
-		}
 		
-		this.getReview = function(imdbid){
-			var index = this.movies.indexOf(imdbid);
-			return this.reviews[index];
-		}
 		
-		this.hasReview = function(imdbid){
-			return (this.movies.indexOf(imdbid) > -1);
-		}
 		
-		this.isEmpty = function(){
-			return (this.reviews.length == 0);
-		}
-		
-		this.getReviews = function(){
-			return this.reviews;
-		}
-		this.generateUbbCode =function(){
+		this.generateUbbCode =function(format,reviews){
 			var ubbcode = "";
 			var self = this;
-			
-			for(var i = 0;i<this.reviews.length;i++){
-				ubbcode  += this.generateUbbFromEntry(this.reviews[i]);
+			if(this.factories.hasOwnProperty(format)){
+				var factory = this.factories[format];
+				reviews.forEach(function(item,index){
+					ubbcode += factory.generateMarkupFromEntry(item);
+					ubbcode += factory.getAdvertiseLink();
+				})
+				
 			}
-			
-			ubbcode += "[sub][url=http://www.jeroensomhorst.eu/ubbgenerator/]Genereer je eigen UBB code review[/url][/sub]";
 			return ubbcode;
 		}
 	}

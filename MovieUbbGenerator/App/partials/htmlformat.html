@@ -1,0 +1,35 @@
+<script type="text/javascript">
+var html = "";
+html += "<table class=\"nocontrast rml\" style=\"width:100%;background-color:transparent\" cellspacing=\"0\" cellpadding=\"6\">";
+html += "<tbody>";
+html += "<tr>";
+html += "<td style=\"font-size:14px\"><a href=\"\" rel=\"external nofollow\" title=\"IMDb -- "+review.movie.Title+" ("+review.movie.Year+")\" target=\"_blank\"><b>"+review.movie.Title+"</b> ("+review.movie.Year+")</a></td>";
+html += "<td style=\"font-size:9px\" rowspan=\"2\" align=\"right\" valign=\"top\">";
+html += "<a href=\""+posterurl+"\" rel=\"external nofollow\" target=\"_blank\">";
+html += "<img class=\"rml border resized\" width=\"110\" height=\"163\" alt=\"{{movie.title}} {{movie.year}}\" title=\""+review.movie.Title+" ("+review.movie.Year+")\" src=\""+posterurl+"\" data-lazyimg=\"1\"></a>";
+html += "</td></tr><tr>";
+html += "<td valign=\"top\"><small><b>IMDb:</b> "+review.movie.imdbRating+" | <b>Genre:</b> "+review.movie.Genre+" | <b>Runtime:</b> "+review.movie.Runtime+" | <b><abbr title=\"Motion Picture Association of America\">MPAA</abbr>:</b> "+review.movie.Rated+"</small>";
+html += "<hr class=\"noshade\">";
+html += "<div style=\"text-align:justify\">"+review.reviewText+"</div>";
+html += "</td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td colspan=\"2\" align=\"right\">";
+html += "<small>";
+html += "<a href=\""+imdbLink+"\" rel=\"external nofollow\" target=\"_blank\">";
+html += "<img src=\"http://www.jeroensomhorst.eu/ubbgenerator/assets/imdb.png\" class=\"rml left\" width=\"16\" height=\"16\" alt=\"\">";
+html += "</a>";
+html += "<a href=\""+wikiLink+"\" rel=\"external nofollow\" target=\"_blank\">";
+html += "<img src=\"http://www.jeroensomhorst.eu/ubbgenerator/assets/wikipedia.png\" class=\"rml left\" width=\"16\" height=\"16\" alt=\"\">";
+html += "</a>";
+html += "<a href=\""+youtubelink+"\" rel=\"external nofollow\" target=\"_blank\">";
+html += "<img src=\"http://www.jeroensomhorst.eu/ubbgenerator/assets/youtube.png\" class=\"rml left\" width=\"16\" height=\"16\" alt=\"\">";
+html += "</a>";
+html += "<img src=\""+starUrl+"\" class=\"rml\" width=\"228\" height=\"24\" alt=\"\">";
+html += "<b>"+reivew.reviewScore+"</b> / 10";
+html += "</small>";
+html += "</td>";
+html += "</tr>";
+html += "</tbody>";
+html += "</table>";
+
