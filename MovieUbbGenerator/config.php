@@ -5,6 +5,6 @@ $config = array(
 	'db.username'=>'root',
 	'db.password'=>'',
 	'db.name' => 'jeroen01_moviedb',
-	'api.baseurl'=> 'http://svr2.omdbapi.com'
+	'api.baseurl'=> 'http://www.omdbapi.com'
 )
 ?>
