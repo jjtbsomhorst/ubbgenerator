@@ -1,9 +1,0 @@
-<?php
-$config = array(
-	'imagepath'=>'/var/www/MovieUbbGenerator/images/',
-	'db.host'=>'localhost',
-	'db.username'=>'root',
-	'db.password'=>'root',
-	'db.name' => 'movi'
-)
-?>
