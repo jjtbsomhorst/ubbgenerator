@@ -113,7 +113,6 @@ c.controller('reviewListController',['$scope','reviewService','convertService','
 	};
 	
 	$scope.generateUbbFromList = function(){
-		debugger;
 		var queryParams = $location.search();
 		var format = "ubb";
 		if(queryParams.hasOwnProperty('format')){
