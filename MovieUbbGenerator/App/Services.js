@@ -264,7 +264,6 @@ services.factory('reviewService',['$http','$q','$rootScope',function($http,$q,$s
 		$scope.reviews.forEach(function(item,index){
 			if(!item.hasOwnProperty('reviewId')){
 				$http.post('api.php/review',item).success(function(data,status,headers,config){
-					debugger;
 					if(hasReview(data.movie.imdbID)){
 						updateReview(data);
 					}
