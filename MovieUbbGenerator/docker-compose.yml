@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  database:
+    image: "mariadb:latest"
+    ports: 
+      - '3306:3306'
+    volumes:
+      - './mysql:/etc/mysql;'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  web:
+    image: "php_8.0.7_composer"
+    build: docker/php
+    restart: 'always'
+    ports:
+      - '80:80'
+    volumes:
+      - ./www:/var/www/html/
+  composer:
+    image: composer:latest
+    command: ["composer", "install"]
+    volumes:
+      - C:\Users\jsomh\Projects\ubbgenerator\MovieUbbGenerator\www\:/app
