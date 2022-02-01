@@ -1,3 +1,7 @@
 /mysql
 /redis
-/www/**
+/www/vendor/**
+/www/config/settings.php
+*.env
+/.idea
+/.settings
