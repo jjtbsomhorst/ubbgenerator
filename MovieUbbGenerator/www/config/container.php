@@ -1,5 +1,7 @@
 <?php
 
+use App\Entity\ReviewEntity;
+use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use GuzzleHttp\Client;
@@ -33,15 +35,21 @@ return [
         $proxyDir = null;
         $cache = null;
         $useSimpleAnnotationReader = false;
-        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/src"), $isDevMode, $proxyDir, $cache, $useSimpleAnnotationReader);
+        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), $isDevMode, $proxyDir, $cache, $useSimpleAnnotationReader);
         $dbParams = array(
             'driver'   => 'pdo_mysql',
+            'host' => 'database',
             'user'     => 'root',
-            'password' => 'database',
+            'password' => 'root',
             'dbname'   => 'app',
         );
         return EntityManager::create($dbParams, $config);
     },
+
+    ReviewRepository::class => function(ContainerInterface $container,EntityManager $em){
+        return $em->getRepository(ReviewEntity::class);
+    },
+
 
     App::class => function (ContainerInterface $container) {
         AppFactory::setContainer($container);
