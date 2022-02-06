@@ -18,6 +18,28 @@ services:
       - '8080:80'
     volumes:
       - ./www:/var/www/html/
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./php/content:/srv/www/content
+      - ./static:/srv/www/static
+      - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
+      - nodejs
+  nodejs:
+    image: node:alpine
+    environment:
+      NODE_ENV: production
+    working_dir: /home/app
+    restart: always
+    volumes:
+      - ./nodejs:/home/app
+    depends_on:
+      - php
+    command: [ "node", "index" ]
   composer:
     image: composer:latest
     command: ["composer", "install"]
