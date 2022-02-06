@@ -2,32 +2,36 @@
 
 namespace App\Action;
 
-use App\Services\MovieService;
+use jjtbsomhorst\omdbapi\model\util\MediaType;
+use jjtbsomhorst\omdbapi\OmdbApiClient;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class MovieSearchAction extends AbstractAction{
+class MovieSearchAction extends AbstractAction
+{
+    private OmdbApiClient $client;
 
-    private MovieService $movieService;
-
-    public function __construct(MovieService $service)
+    public function __construct(OmdbApiClient $service)
     {
-        $this->movieService = $service;
+        $this->client = $service;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $response->getBody()->write(json_encode(['success' => true]));
+        $params = $request->getQueryParams();
 
-        if(!empty($args['term'])){
-            if($this->movieService->isImdbId($args['term'])){
-                die(print_r($this->movieService->getMovieById($args['term']),true));
-            }else{
-                die(print_r($this->movieService->getMovieByName($args['term']),true));
+        if(array_key_exists('name',$params)){
+            $page = 1;
+            if(isset($params['page']) && is_numeric($params['page'])){
+                $page = $params['page'];
             }
 
+            $apiResponse = $this->client->searchRequest($params['name'],$page,MediaType::Movie)->execute();
+            $response->getBody()->write(json_encode($apiResponse));
+            return $response;
         }
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response->withStatus('400','Name property is mandatory');
     }
+
 }

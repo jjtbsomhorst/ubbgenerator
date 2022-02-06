@@ -13,7 +13,7 @@ final class HomeAction extends AbstractAction
     /**
      * @OA\Get(
      *     path="/",
-     *     @OA\Response(response="200", description="An example resource")
+     *     @OA\Response(response="200", description="Get nothing, yet")
      * )
      */
     public function __invoke(
