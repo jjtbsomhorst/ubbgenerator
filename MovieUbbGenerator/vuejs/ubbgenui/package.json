@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "fomantic-ui-css": "^2.8.8",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
+    "vue-fomantic-ui": "^0.11.0",
+    "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {

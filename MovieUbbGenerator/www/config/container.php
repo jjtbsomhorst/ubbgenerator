@@ -29,13 +29,23 @@ return [
         return require __DIR__ . '/settings.php';
     },
 
-    EntityManager::class=>function(){
+    EntityManager::class=>function(ContainerInterface $container){
         // Create a simple "default" Doctrine ORM configuration for Annotations
         $isDevMode = true;
         $proxyDir = null;
         $cache = null;
         $useSimpleAnnotationReader = false;
+
+
+        $redis= new RedisAdapter(
+            $container->get(RedisAdapter::class),
+            "doctrine",
+            60
+        );
+
         $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), $isDevMode, $proxyDir, $cache, $useSimpleAnnotationReader);
+        $config->setQueryCache($redis);
+        $config->setResultCache($redis);
         $dbParams = array(
             'driver'   => 'pdo_mysql',
             'host' => 'database',

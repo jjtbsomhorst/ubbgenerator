@@ -12,6 +12,23 @@ class Review implements \JsonSerializable
     private String $source;
     private string $username;
     private string $reviewId;
+    private Movie $movie;
+
+    /**
+     * @return Movie
+     */
+    public function getMovie(): Movie
+    {
+        return $this->movie;
+    }
+
+    /**
+     * @param Movie $movie
+     */
+    public function setMovie(Movie $movie): void
+    {
+        $this->movie = $movie;
+    }
 
     /**
      * @return string
