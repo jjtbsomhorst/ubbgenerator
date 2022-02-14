@@ -8,7 +8,7 @@
     </sui-menu-item>
     <sui-menu-menu>
       <sui-menu-item>
-        <sui-input transparent icon="search" placeholder="Search..." />
+        <sui-input :loading=loading iconPosition="left" icon="search" placeholder="Search..."  v-model="searchTerm" onsubmit="onSubmit" />
       </sui-menu-item>
     </sui-menu-menu>
   </sui-menu>

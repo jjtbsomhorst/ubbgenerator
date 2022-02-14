@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use App\Entity\ReviewEntity;
+use App\Model\Wrappers\ListResult;
 use App\Model\Wrappers\ReviewApiWrapper;
 use App\Model\Wrappers\MovieWrapper;
 use App\Repository\ReviewRepository;
@@ -41,7 +42,12 @@ class LatestReviewsAction extends AbstractAction
             }
         }
 
-        $response->getBody()->write(json_encode($wrapped));
+        $result = new ListResult();
+        $result->setTotalResults(count($reviews));
+        $result->setSearch($wrapped);
+        $result->setCurrentPage(1);
+
+        $response->getBody()->write(json_encode($result));
         return $response;
     }
 }

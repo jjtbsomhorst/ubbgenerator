@@ -21,8 +21,10 @@ class ReviewRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findLatest(int $limit = 10) :array{
         $qb = $this->createQueryBuilder('r')
+            ->groupBy('r.imdbid')
           ->orderBy('r.reviewid','DESC')
             ->setMaxResults($limit);
+
         $query = $qb->getQuery();
         return $query->getResult();
     }

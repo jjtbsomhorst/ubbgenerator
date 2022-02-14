@@ -108,7 +108,7 @@ return [
             new CacheMiddleware(
                 new GreedyCacheStrategy(
                     new Psr6CacheStorage(
-                        $this->cachePool),
+                        $redis),
                     1800,
                 )
             )
@@ -116,7 +116,7 @@ return [
             'cache'
         );
         $props['handler'] = $stack;
-
+        $props['verify']=false;
 
         return new Tmdb($tmdbkey,new Client($props));
     },

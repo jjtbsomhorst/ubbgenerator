@@ -1,5 +1,7 @@
 import { Options, Vue } from 'vue-class-component';
+import {Prop, Watch} from "vue-property-decorator";
 import {SuiMenuItem, SuiMenu, SuiMenuMenu, SuiInput, SuiIcon} from 'vue-fomantic-ui';
+import { bus } from 'vue3-eventbus'
 
 @Options({
     components:{
@@ -7,7 +9,31 @@ import {SuiMenuItem, SuiMenu, SuiMenuMenu, SuiInput, SuiIcon} from 'vue-fomantic
     }
 })
 export default class MainMenu extends Vue {
-    go(event){
+
+    public searchTerm = "";
+    @Prop({ loading: Boolean })
+    protected loading!: boolean;
+
+    private timer :any = null;
+
+    go(event:string){
         this.$router.push({ name: event});
+    }
+
+    onTime():void{
+        if(this.searchTerm!==null && this.searchTerm != "") {
+            console.log('yay!');
+            bus.emit('searchterm_entered', this.searchTerm);
+        }
+    }
+
+    @Watch('searchTerm')
+    handleChange(event:any):void {
+
+        if(this.timer!==null){
+            console.log('clear the timer! ')
+            clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(()=>{this.onTime()},500);
     }
 }

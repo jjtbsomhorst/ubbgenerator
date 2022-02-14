@@ -1,8 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import FomanticUI from 'vue-fomantic-ui'
 import 'fomantic-ui-css/semantic.min.css'
+import eventBus from 'vue3-eventbus';
 
-createApp(App)
+const pp = createApp(App);
+pp.use(FomanticUI)
     .use(router)
-    .mount('#app')
+    .use(eventBus)
+pp.mount('#app');

@@ -5,6 +5,7 @@ use App\Action\HomeAction;
 use App\Action\LatestReviewsAction;
 use App\Action\MovieByIdAction;
 use App\Action\MovieNowPlayingAction;
+use App\Action\MoviePosterByIdAction;
 use App\Action\MovieSearchAction;
 use App\Action\ReviewCreateAction;
 use Slim\App;
@@ -20,5 +21,6 @@ return function (App $app) {
     $app->get('/movies/nowplaying',MovieNowPlayingAction::Class,'nowplaying');
     $app->get('/movies/{id}', MovieByIdAction::class,'Moviesbyid');
     $app->get('/swagger.yml',GenerateSwaggerAction::class,'generateSwagger');
+    $app->get('/movies/{id}/poster',MoviePosterByIdAction::class,'posterbyid');
 };
 

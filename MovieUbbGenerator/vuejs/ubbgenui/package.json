@@ -10,11 +10,13 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "fomantic-ui-css": "^2.8.8",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-fomantic-ui": "^0.11.0",
     "vue-property-decorator": "^9.1.2",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vue3-eventbus": "^2.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -43,7 +45,9 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": {}
+    "rules": {
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
   },
   "browserslist": [
     "> 1%",

@@ -1,8 +1,7 @@
 <template>
-  <sui-container class="page">
-    <main-menu></main-menu>
+  <div class="page container">
     <router-view/>
-  </sui-container>
+  </div>
 </template>
 
 <script lang="ts" src="./App.ts"/>

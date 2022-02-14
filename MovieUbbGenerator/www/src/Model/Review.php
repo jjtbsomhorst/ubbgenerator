@@ -14,6 +14,10 @@ class Review implements \JsonSerializable
     private string $reviewId;
     private Movie $movie;
 
+
+    public function __construct(){
+    }
+
     /**
      * @return Movie
      */
@@ -146,7 +150,12 @@ class Review implements \JsonSerializable
         $jsonrep = [];
 
         foreach($props as $p){
-            $jsonrep[$p->getName()] = $p->getValue($this);
+            if($p->isInitialized($this)){
+                $jsonrep[$p->getName()] = $p->getValue($this);
+            }else{
+                $jsonrep[$p->getName()] = null;
+            }
+
         }
         return $jsonrep;
     }
