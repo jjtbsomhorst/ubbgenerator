@@ -46,7 +46,8 @@
       "ecmaVersion": 2020
     },
     "rules": {
-      "@typescript-eslint/ban-ts-comment": "off"
+      "@typescript-eslint/ban-ts-comment": "off",
+      "prefer-const": "off"
     }
   },
   "browserslist": [

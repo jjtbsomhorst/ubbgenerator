@@ -1,14 +1,13 @@
 import {Options, Vue} from 'vue-class-component';
-import {SuiContainer,SuiGrid,SuiGridColumn } from 'vue-fomantic-ui';
+import {SuiContainer,SuiGrid,SuiGridColumn,SuiCard,SuiButton,SuiIcon } from 'vue-fomantic-ui';
 import MovieGroupList from "@/components/MovieGroupList/MovieGroupList.vue";
-import MovieSearchList from "@/components/MovieSearchList/MovieSearchList";
 import { bus } from 'vue3-eventbus'
 import MainMenu from '@/components/MainMenu/MainMenu.vue';
 
 
 @Options({
     components: {
-        SuiContainer,SuiGrid,SuiGridColumn,MovieGroupList,MovieSearchList,MainMenu
+        SuiContainer,SuiGrid,SuiGridColumn,SuiCard,MovieGroupList,MainMenu,SuiButton,SuiIcon
     },
 })
 
@@ -16,6 +15,8 @@ export default class Home extends Vue {
 
     public loading = true;
     public search = false;
+    public searchResource = "";
+
     private children:Map<string,boolean> = new Map();
 
     beforeCreate() :void{
@@ -43,11 +44,17 @@ export default class Home extends Vue {
 
         bus.on('searchterm_entered',(data:string)=>{
             if(data.length == 0){
-                this.search = false;
+                this.search =false;
             }else if(data.length > 3){
                 this.search = true;
+                console.log('we hebben data.. searchresource zetton')
+                this.searchResource = "api/movies/search?name="+data;
             }
         });
+
+        bus.on('searchterm_cleared',()=>{
+            this.search = false;
+        })
 
     }
 }

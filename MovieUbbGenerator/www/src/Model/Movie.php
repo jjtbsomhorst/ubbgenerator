@@ -16,6 +16,8 @@ class Movie implements \JsonSerializable{
     private int $year;
     private float $imdbRating;
     private string $poster;
+    private string $title;
+    private string $plot ="";
 
     /**
      * @return string
@@ -115,7 +117,37 @@ class Movie implements \JsonSerializable{
             "imdbRating" => $this->imdbRating,
             "poster" => $this->poster,
             "year" => $this->year,
-            "genre"=> $this->genre
+            "genre"=> $this->genre,
+            "title"=>$this->title,
+            "plot" => $this->plot
         );
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): Movie
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getPlot(mixed $overview): string
+    {
+        return $this->plot;
+    }
+
+    public function setPlot(string $plot) : Movie{
+        $this->plot = $plot;
+        return $this;
+    }
+
 }

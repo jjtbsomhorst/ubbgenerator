@@ -22,5 +22,6 @@ return function (App $app) {
     $app->get('/movies/{id}', MovieByIdAction::class,'Moviesbyid');
     $app->get('/swagger.yml',GenerateSwaggerAction::class,'generateSwagger');
     $app->get('/movies/{id}/poster',MoviePosterByIdAction::class,'posterbyid');
+    $app->get('/platforms',\App\Action\GetPlatformsAction::class,'getplatforms');
 };
 

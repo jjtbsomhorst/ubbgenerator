@@ -24,6 +24,8 @@ export default class MainMenu extends Vue {
         if(this.searchTerm!==null && this.searchTerm != "") {
             console.log('yay!');
             bus.emit('searchterm_entered', this.searchTerm);
+        }else{
+            bus.emit('searchterm_cleared');
         }
     }
 

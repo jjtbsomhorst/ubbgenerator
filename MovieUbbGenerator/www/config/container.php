@@ -83,7 +83,11 @@ return [
 
         $client = new OmdbApiClient();
         $client->apiKey($settings['omdbapi']['key']);
-        $client->cache($redis);
+
+        if(!$settings['debug']){
+            $client->cache($redis);
+        }
+
         $client->proxy('host.docker.internal',8888);
         return $client;
     },
@@ -94,6 +98,8 @@ return [
         return $redisClient;
     },
     Tmdb::class => function(ContainerInterface $container){
+
+        $settings= $container->get('settings');
         $tmdbkey = $container->get('settings')['tmdbapi']['key'];
         $redis= new RedisAdapter(
             $container->get(RedisAdapter::class),
@@ -115,10 +121,28 @@ return [
             ,
             'cache'
         );
-        $props['handler'] = $stack;
+        if(!$settings['debug']){
+            $props['handler'] = $stack;
+        }
+
+
+
         $props['verify']=false;
 
-        return new Tmdb($tmdbkey,new Client($props));
+        $client = new Tmdb($tmdbkey,new Client($props));
+
+        // warming up the cache..
+        error_log('warming up the cache');
+        $movieGenres = $client->genres()->movieList();
+        $tvShowGenres  =$client->genres()->tvList();
+        error_log('done');
+        return $client;
+    },
+
+    \App\Model\Wrappers\TmdbWrapper::class => function(ContainerInterface $container){
+        $client = $container->get(Tmdb::class);
+
+      return new \App\Model\Wrappers\TmdbWrapper($client) ;
     },
 
     Serializer::class => function(){
