@@ -24,7 +24,7 @@ class GetPlatformsAction extends AbstractAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $entities = $this->repo->findAll();
+        $entities = $this->repo->findBy([],['name'=>'ASC']);
         $result = [];
 
         foreach($entities as $entity){

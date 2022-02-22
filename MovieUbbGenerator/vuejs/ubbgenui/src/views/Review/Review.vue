@@ -20,7 +20,7 @@
           </sui-card>
         </sui-grid-column>
       </sui-grid-row>
-      <review-editor :platforms="platforms"/>
+      <review-editor :platforms="platforms" :movie="item"/>
     </sui-grid>
 
 

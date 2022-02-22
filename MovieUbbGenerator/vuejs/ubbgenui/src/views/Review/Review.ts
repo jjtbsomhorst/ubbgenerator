@@ -3,7 +3,7 @@ import {Prop,Watch} from "vue-property-decorator";
 import MainMenu from '@/components/MainMenu/MainMenu.vue';
 import {SuiContainer,SuiCard,SuiGrid,SuiGridRow,SuiGridColumn,SuiFormTextarea,SuiForm,SuiMenu,SuiMenuMenu,SuiMenuItem  } from 'vue-fomantic-ui';
 import ReviewEditor from "@/components/ReviewEditor/ReviewEditor.vue";
-import Movie from "@/components/Movie/Movie";
+import {MovieEntity} from "@/entities/MovieEntity";
 @Options({
     components: {
         MainMenu,SuiContainer,SuiCard,SuiGrid,SuiGridRow,SuiGridColumn,SuiFormTextarea,SuiForm,SuiMenu,SuiMenuMenu,SuiMenuItem,ReviewEditor
@@ -12,12 +12,14 @@ import Movie from "@/components/Movie/Movie";
 export default class Review extends Vue{
 
     public loading = true;
+    private item?:MovieEntity;
+    private platforms = [];
+
 
     @Prop()
     public imdbId = "";
 
-    private item = null;
-    private platforms = [];
+
 
     @Watch('imdbId')
     refresh():void{
@@ -37,24 +39,17 @@ export default class Review extends Vue{
         }).then(data => {
             // Log the data to the console
             // You would do something with both sets of data here
-            this.item = data[0];
+
+            //this.item = <MovieEntity> data[0];
+            this.item = <MovieEntity> data[0];
+            console.log(this.item);
+
             this.platforms = data[1].search;
             this.loading=false;
         }).catch(error => {
             // if there's an error, log it
             console.log(error);
         });
-
-
-        // fetch()
-        //     .then(response=>response.json())
-        //     .then(data=>{
-        //         this.item = data;
-        //         this.loading=false;
-        //     })
-        //     .catch(data=>{
-        //         console.log('error!!');
-        //     });
 
     }
 }
