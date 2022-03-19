@@ -141,8 +141,8 @@ return [
 
     \App\Model\Wrappers\TmdbWrapper::class => function(ContainerInterface $container){
         $client = $container->get(Tmdb::class);
-
-      return new \App\Model\Wrappers\TmdbWrapper($client) ;
+        $omdb = $container->get(OmdbApiClient::class);
+      return new \App\Model\Wrappers\TmdbWrapper($client,$omdb) ;
     },
 
     Serializer::class => function(){

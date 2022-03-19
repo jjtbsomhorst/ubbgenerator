@@ -8,21 +8,18 @@ use ReflectionProperty;
 
 class Movie implements \JsonSerializable{
 
-    private string $imdbId;
-    /**
-     * @var string[]
-     */
-    private array $genre;
-    private int $year;
-    private float $imdbRating;
-    private string $poster;
-    private string $title;
-    private string $plot ="";
+    private string $imdbId = "";
+    private array $genre = [];
+    private int $year = -1;
+    private float $imdbRating = 0;
+    private string $poster = "";
+    private string $title = "";
+    private string $plot = "";
 
     /**
      * @return string
      */
-    public function getImdbId(): string
+    public function getImdbId(): ?string
     {
         return $this->imdbId;
     }
@@ -40,7 +37,7 @@ class Movie implements \JsonSerializable{
     /**
      * @return string[]
      */
-    public function getGenre(): array
+    public function getGenre(): ?array
     {
         return $this->genre;
     }
@@ -58,7 +55,7 @@ class Movie implements \JsonSerializable{
     /**
      * @return int
      */
-    public function getYear(): int
+    public function getYear(): ?int
     {
         return $this->year;
     }
@@ -76,7 +73,7 @@ class Movie implements \JsonSerializable{
     /**
      * @return float
      */
-    public function getImdbRating(): float
+    public function getImdbRating(): ?float
     {
         return $this->imdbRating;
     }
@@ -94,7 +91,7 @@ class Movie implements \JsonSerializable{
     /**
      * @return string
      */
-    public function getPoster(): string
+    public function getPoster(): ?string
     {
         return $this->poster;
     }
@@ -126,7 +123,7 @@ class Movie implements \JsonSerializable{
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }

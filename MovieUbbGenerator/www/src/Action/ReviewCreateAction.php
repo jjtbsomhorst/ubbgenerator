@@ -33,7 +33,8 @@ class ReviewCreateAction extends AbstractAction
             foreach($e->getValidationResult()->getErrors() as $error){
                 $errorBody['details'][] = sprintf("Field %s: %s",$error->getField(),$error->getMessage());
             }
-            $response->withStatus(400)->getBody()->write(json_encode($errorBody));
+            $response = $response->withStatus(400);
+            $response->getBody()->write(json_encode($errorBody));
         }
         return $response;
     }

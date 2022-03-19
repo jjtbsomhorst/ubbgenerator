@@ -40,8 +40,12 @@ class MovieNowPlayingAction extends AbstractAction
             /**
              * @var Movie $movie;
              */
-            $movie = $this->omdbApi->byIdRequest($m->getImdbId(),MediaType::Movie)->execute();
-            $m->setPoster($movie->getPoster());
+         
+
+                $posterUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face".$m->getPoster();
+                $m->setPoster($posterUrl);
+            
+
         }
 
         $response->getBody()->write(json_encode($result));

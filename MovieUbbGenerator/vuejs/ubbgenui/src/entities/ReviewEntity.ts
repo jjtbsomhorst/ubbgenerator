@@ -1,33 +1,51 @@
+import { StreamingPlatform } from "./StreamingPlatform";
+
 export class ReviewEntity{
 
     private _imdbId!: string;
-    public get imdbId(): string {
+    private _text!: string;
+    private _rating!: number;
+    private _platform!: StreamingPlatform;
+
+    public get imdbId(): string{
         return this._imdbId;
     }
-    public set imdbId(value: string) {
-        this._imdbId = value;
+
+    public set imdbId(id: string){
+        this._imdbId = id;
     }
-    private _text!: string;
-    public get text(): string {
+
+    public get text(): string{
         return this._text;
     }
-    public set text(value: string) {
-        this._text = value;
+
+    public set text(t: string){
+        this._text = t;
     }
-    private _rating!: number;
-    public get rating(): number {
+    
+    public get rating(): number{
         return this._rating;
     }
-    public set rating(value: number) {
-        this._rating = value;
+
+    public set rating(r: number){
+        this._rating = r;
     }
-    private _platform!: number;
-    public get platform(): number {
+
+    public get platform(): StreamingPlatform {
         return this._platform;
     }
-    public set platform(value: number) {
+    public set platform(value: StreamingPlatform) {
         this._platform = value;
     }
 
+    public toJson(){
+        return {
+            imdbId: this.imdbId,
+            source: this.platform.value,
+            score: this.rating,
+            body: this.text,
+            username: ''
+          };
+    }
 
 }

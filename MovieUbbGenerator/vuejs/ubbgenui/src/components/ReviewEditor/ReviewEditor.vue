@@ -29,12 +29,17 @@
           <sui-menu-item>
             <div class="ui icon input" type="number">
               <input type="number"  min="1" max="10" step="0.5" placeholder="rating.." v-model="rating"><i aria-hidden="true" class="star outline icon"></i></div>
+              <!-- <sui-rating :defaultRating="1" :maxRating="10" color="yellow" :value="rating"/> -->
           </sui-menu-item>
         </sui-menu-menu>
       </sui-menu>
     </sui-grid-column>
   </sui-grid-row>
-
+  <sui-grid-row>
+    <sui-grid-column>
+        <MessageBox type="info" v-if="hasError" :title="error.error" :errors="error.details" />
+    </sui-grid-column>
+  </sui-grid-row>
   
   <sui-grid-row>
     <sui-grid-column>
@@ -61,7 +66,7 @@
             </sui-menu>
           </sui-item-header>
           <sui-item-description :hidden="previewVisible">
-            {{review}}
+            <textarea readonly v-model="review" id="ReviewResult"></textarea>
           </sui-item-description>
         </sui-item-content>
       </sui-item>

@@ -51,7 +51,7 @@
                   <b>Released:</b>{{ props.item.movie.year }}
                 </sui-card-meta>
                 <sui-card-description>
-                  {{ props.item.body }}
+                  {{ props.item.movie.plot }}
                 </sui-card-description>
               </sui-card-content>
               <sui-card-content extra>

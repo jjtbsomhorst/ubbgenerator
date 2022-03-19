@@ -1,16 +1,16 @@
 import {Options, Vue} from 'vue-class-component';
 import {Prop,Watch} from "vue-property-decorator";
-import {SuiDropdown,SuiDropdownMenu, SuiDropdownItem,SuiFormField} from 'vue-fomantic-ui';
+import {SuiDropdown,SuiDropdownMenu, SuiDropdownItem,SuiFormField,SuiRating} from 'vue-fomantic-ui';
 import {StreamingPlatform} from "@/entities/StreamingPlatform";
 import {ReviewService} from "@/services/ReviewService";
 import {ReviewEntity} from "@/entities/ReviewEntity";
 import { MovieEntity } from '@/entities/MovieEntity';
+import MessageBox from '../MessageBox/MessageBox.vue';
 
-import { computed } from 'vue';
-import { routeLocationKey } from 'vue-router';
+
 @Options({
     components: {
-        SuiDropdown,SuiDropdownItem,SuiDropdownMenu,SuiFormField
+        SuiDropdown,SuiDropdownItem,SuiDropdownMenu,SuiFormField,SuiRating,MessageBox
     },
 })
 export default class ReviewEditor extends Vue{
@@ -18,6 +18,10 @@ export default class ReviewEditor extends Vue{
     public selectedPlatform:StreamingPlatform = new StreamingPlatform(-1,'Platform..');
     public customPlatform = "";
     public reviewText = "";
+
+    public error:any;
+
+    public hasError= false;
     // @ts-ignore
     public rating = 0;
 
@@ -81,20 +85,42 @@ export default class ReviewEditor extends Vue{
 
         let r:ReviewEntity = new ReviewEntity();
         r.imdbId = this.movie.imdbID;
-        r.platform= this.selectedPlatform.value;
+        r.platform= this.selectedPlatform;
         r.rating= this.rating;
         r.text= this.reviewText;
 
         fetch('/api/reviews',{
             method: 'POST',
-            body: JSON.stringify(r),
+            body: JSON.stringify(r.toJson()),
             headers: {
                 'Content-Type':'application/json'
             }
         })
-        .then(res => res.json())
-        .then(()=>{console.log('success!')})
-        .catch(()=>{console.log('kepot')});
+        .then((res)=>{
+            if(!res.ok){
+                throw res;
+            }
+            return res.json();
+        })
+        .then(()=>{
+            let element = document.getElementById("ReviewResult") as HTMLTextAreaElement;
+            navigator.clipboard.writeText(element.value);
+
+        })
+        .catch((data)=>{
+            //@ts-ignore
+            data.json().then((e)=>{
+                console.log('kepot');
+                console.log(e);
+                this.hasError = true;
+                this.error = e;
+            })
+            
+        });
+    }
+
+    onSelect(event: any):void{
+        console.log(event);
     }
     onDecorateEvent(decoration:string):void{
         console.log(this.$refs);

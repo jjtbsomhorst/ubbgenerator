@@ -14,7 +14,8 @@ class MovieWrapper
             ->setImdbRating($source->getImdbRating())
             ->setYear(intval($source->getYear()))
             ->setTitle($source->getTitle())
-            ->setPoster($source->getPoster());
+            ->setPoster($source->getPoster())
+            ->setPlot($source->getPlot());
 
     }
 }
