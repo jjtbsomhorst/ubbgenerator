@@ -1,13 +1,13 @@
 import {Options, Vue} from 'vue-class-component';
 import {Prop, Watch} from "vue-property-decorator";
-import {SuiItemContent,SuiItemGroup, SuiMenu,SuiMenuItem,SuiMenuMenu,SuiItemImage,SuiItem,SuiItemHeader,SuiItemMeta,SuiItemDescription,SuiIcon } from 'vue-fomantic-ui';
+import {SuiItemContent,SuiItemGroup, SuiMenu,SuiMenuItem,SuiMenuMenu,SuiItemImage,SuiItem,SuiItemHeader,SuiItemMeta,SuiItemDescription,SuiIcon,SuiLoader } from 'vue-fomantic-ui';
 import {MovieEntity} from "@/entities/MovieEntity";
 import { bus } from 'vue3-eventbus'
 import { v4 as uuidv4 } from 'uuid';
 
 @Options({
     components: {
-        SuiItemGroup, SuiItemImage, SuiItem,SuiItemContent,SuiItemHeader,SuiItemMeta,SuiItemDescription, SuiMenu, SuiMenuMenu,SuiMenuItem,SuiIcon
+        SuiItemGroup, SuiItemImage, SuiItem,SuiItemContent,SuiItemHeader,SuiItemMeta,SuiItemDescription, SuiMenu, SuiMenuMenu,SuiMenuItem,SuiIcon,SuiLoader
     },
 })
 export default class MovieGroupList extends Vue {
@@ -20,6 +20,7 @@ export default class MovieGroupList extends Vue {
     private pagesize = 10;
     private maxresults = 0;
     private maxPage = 1;
+    private loading = false;
 
     get items(): Array<MovieEntity> {
         return this.movieItems;
@@ -61,15 +62,16 @@ export default class MovieGroupList extends Vue {
 
     }
 
-    created(){
+    created():void{
         this.uniqueId = uuidv4();
         console.log('Created child: '+this.uniqueId);
         bus.emit('child_created',this.uniqueId);
     }
-    beforeMount(){
+    beforeMount():void{
         this.loadData(this.resource);
     }
-    protected loadData(url:string){
+    protected loadData(url:string):void{
+        this.loading = true;
         if(url == ""){
             url = this.resource;
         }
@@ -87,6 +89,7 @@ export default class MovieGroupList extends Vue {
                 this.currentPage = data.currentPage;
                 this.maxresults = parseInt(data.totalResults);
                 bus.emit('child_loaded',this.uniqueId);
+                this.loading=false;
                 this.updatePagingData();
             });
         }
@@ -95,7 +98,7 @@ export default class MovieGroupList extends Vue {
     }
 
     @Watch('resource')
-    refresh(){
+    refresh():void{
         console.log('refresh!');
         this.items = [];
         this.currentPage = 1;
